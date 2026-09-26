@@ -19,7 +19,16 @@ input,select,textarea{width:100%;padding:11px 12px;border:1px solid #cbd7db;bord
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}.stat b{font-size:26px;display:block}.stat span{font-size:11px;color:var(--slate)}
 .hidden{display:none}.review-row{display:flex;justify-content:space-between;gap:15px;border-bottom:1px solid #edf1f1;padding:11px 0;font-size:13px}.review-row span{color:var(--slate)}
 footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
-@media(max-width:850px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{display:flex;overflow:auto}nav button{min-width:155px}.hero{grid-template-columns:1fr}.grid,.stats{grid-template-columns:1fr}main{padding:20px}.hero h1{font-size:33px}}
+.impact-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;flex-wrap:wrap}.impact-head h2{margin:4px 0 0;font-size:28px;letter-spacing:-.5px}.yearbox{min-width:280px}.yearbox input{accent-color:var(--teal)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px}.kpi .v{font-size:24px;font-weight:800;letter-spacing:-.5px}.kpi .l{font-size:10px;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}.kpi .s{font-size:10px;color:var(--teal);margin-top:7px}
+.flow{display:grid;grid-template-columns:1fr 42px 1fr 42px 1fr 42px 1fr;align-items:center;gap:5px;margin:16px 0}.flow-node{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;min-height:100px}.flow-node b{display:block;font-size:21px}.flow-node small{color:var(--slate)}.arrow{text-align:center;color:var(--teal);font-size:24px;font-weight:800}
+.impact-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}.panel h3{margin:0 0 12px}.agebar{display:grid;grid-template-columns:72px 1fr 70px;gap:8px;align-items:center;margin:9px 0;font-size:11px}.track{height:11px;background:#edf2f2;border-radius:8px;overflow:hidden}.track i{display:block;height:100%;background:var(--teal);border-radius:8px}
+.mapbox{min-height:430px;position:relative;background:linear-gradient(180deg,#f8fbfb,#eef5f4);border-radius:12px;overflow:hidden;border:1px solid #e2ebeb}.mapbox svg{width:100%;height:430px;display:block}.map-status{position:absolute;left:12px;bottom:12px;background:#ffffffdf;border:1px solid var(--line);padding:7px 9px;border-radius:8px;font-size:10px}.map-tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;padding:8px 10px;border-radius:8px;font-size:10px;display:none;z-index:4;max-width:210px}
+.legend{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--slate);margin-top:8px}.grad{width:130px;height:8px;border-radius:8px;background:linear-gradient(90deg,#dceeee,#087A7E)}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}.impact-table{width:100%;border-collapse:collapse;font-size:11px;min-width:920px}.impact-table th{background:var(--ink);color:#fff;text-align:left;padding:9px}.impact-table td{padding:8px 9px;border-bottom:1px solid #edf1f1;vertical-align:middle}.impact-table tbody tr:hover{background:#f7fbfb}.badge{display:inline-block;padding:3px 7px;border-radius:99px;font-size:9px;font-weight:700}.obs{background:#e5f4ef;color:#176146}.est{background:var(--sand);color:#79550B}
+.territory-form{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.territory-form .wide{grid-column:span 2}.territory-form label{font-size:10px}.territory-form input,.territory-form select{padding:9px;font-size:11px}.mini-actions{display:flex;gap:8px;align-items:end}
+.empty{padding:28px;text-align:center;color:var(--slate);font-size:12px}.source-line{font-size:9px;color:var(--slate);margin-top:8px}
+@media(max-width:850px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{display:flex;overflow:auto}nav button{min-width:155px}.hero{grid-template-columns:1fr}.grid,.stats,.kpis,.impact-grid{grid-template-columns:1fr}main{padding:20px}.hero h1{font-size:33px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.territory-form{grid-template-columns:1fr 1fr}.territory-form .wide{grid-column:span 2}.mapbox,.mapbox svg{height:360px;min-height:360px}}
 </style>
 </head>
 <body>
@@ -40,17 +49,20 @@ footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
 </div>
 <div class="stats" style="margin-top:18px"><div class="stat"><b id="pct">0%</b><span>completado</span></div><div class="stat"><b id="pend">0</b><span>campos clave pendientes</span></div><div class="stat"><b id="stepNow">Inicio</b><span>etapa actual</span></div></div>
 </section>
-<section id="s1" class="hidden"></section><section id="s2" class="hidden"></section><section id="s3" class="hidden"></section><section id="s4" class="hidden"></section><section id="s5" class="hidden"></section><section id="s6" class="hidden"></section><section id="s7" class="hidden"></section>
+<section id="s1" class="hidden"></section><section id="s2" class="hidden"></section><section id="s3" class="hidden"></section><section id="s4" class="hidden"></section><section id="s5" class="hidden"></section><section id="s6" class="hidden"></section><section id="s7" class="hidden"></section><section id="s8" class="hidden"></section>
 </div>
 <footer>IMPACTA · Claridad humana · Prototipo de captura agregada. El diseño no sustituye revisión metodológica, clínica o jurídica.</footer>
 </main>
 </div>
 <script>
 const steps=[
-['Inicio','Panorama del registro'],['Tu proyecto','Alcance y pregunta'],['Recursos','Presupuesto y capacidad'],['Canales','Captación y referencias'],['Escenarios','Supuestos del modelo'],['Población','Grupos etarios'],['Servicios','Información agregada'],['Revisar','Validar y exportar']
+['Inicio','Panorama del registro'],['Tu proyecto','Alcance y pregunta'],['Recursos','Presupuesto y capacidad'],['Canales','Captación y referencias'],['Escenarios','Supuestos del modelo'],['Población','Grupos etarios'],['Servicios','Información agregada'],['Revisar','Validar y exportar'],['Impacto','Inversión → población']
 ];
-const defaults={project:{name:'',org:'',territory:'',question:'',start:2027,end:2031},resources:{budget:'',fixed:'',capacity:'',serviceCost:'',followup:'',retention:''},channels:{digitalContacts:'',digitalConv:'',institutionalContacts:'',institutionalConv:'',communityContacts:'',communityConv:''},scenario:{additionality:'',continuity:'',healthCoeff:'',discount:''},population:{a1014:'',a1519:'',a2024:'',a2534:'',a3549:''},services:{method:'',quantity:'',unit:'',source:''}};
-let state=JSON.parse(localStorage.getItem('impacta-web')||'null')||defaults; let current=0;
+const defaults={project:{name:'',org:'',territory:'',question:'',start:2027,end:2031},resources:{budget:'',fixed:'',capacity:'',serviceCost:'',followup:'',retention:''},channels:{digitalContacts:'',digitalConv:'',institutionalContacts:'',institutionalConv:'',communityContacts:'',communityConv:''},scenario:{additionality:'',continuity:'',healthCoeff:'',discount:''},population:{a1014:'',a1519:'',a2024:'',a2534:'',a3549:''},services:{method:'',quantity:'',unit:'',source:''},territories:[],impact:{year:'',metric:'investment',mapLevel:'department'}};
+let state=JSON.parse(localStorage.getItem('impacta-web')||'null')||structuredClone(defaults); 
+if(!state.territories) state.territories=[];
+if(!state.impact) state.impact={year:'',metric:'investment',mapLevel:'department'};
+let current=0; let daneGeo=null; let daneLevel='department';
 function nav(){document.getElementById('nav').innerHTML=steps.map((s,i)=>'<button class="'+(i===current?'active':'')+'" onclick="go('+i+')"><span class="n">'+i+'</span><span><b>'+s[0]+'</b><br><small>'+s[1]+'</small></span></button>').join('')}
 function field(group,key,label,help,type='text',extra=''){const v=(state[group]&&state[group][key])??'';return '<div '+(extra==='full'?'class="full"':'')+'><label>'+label+'</label><input type="'+type+'" value="'+v+'" oninput="setv(\''+group+'\',\''+key+'\',this.value)" aria-label="'+label.replace(/<[^>]+>/g,'')+'"><div class="help">'+help+'</div></div>'}
 function setv(g,k,v){state[g][k]=v;save(false);metrics()}
@@ -103,6 +115,7 @@ if(current===6)document.getElementById(id).innerHTML=card('6. Servicios agregado
  field('services','source','Fuente / versión','Archivo, sistema, fecha o referencia que respalda el dato.','text','full')
  ,'No incluya nombres, documentos, teléfonos ni historias clínicas. Esta versión es para información agregada.')+buttons(5,7);
 if(current===7)document.getElementById(id).innerHTML=review();
+if(current===8){document.getElementById(id).innerHTML=impactView(); setTimeout(()=>{renderImpact();loadDaneMap();},0);}
 nav();metrics();window.scrollTo({top:0,behavior:'smooth'});
 }
 function review(){
@@ -115,14 +128,122 @@ return '<div class="card"><div class="eyebrow" style="color:var(--teal)">Revisi�
 '<div class="review-row"><b>Pregunta</b><span>'+esc(state.project.question||'No definida')+'</span></div>'+
 '<div class="review-row"><b>Presupuesto</b><span>'+money(state.resources.budget)+'</span></div>'+
 '<div class="review-row"><b>Distribución etaria</b><span>'+age.toFixed(1)+'% '+(Math.abs(age-100)<.1?'✓':'(revisar)')+'</span></div>'+
-'<div class="actions"><button class="btn" onclick="go(6)">← Editar</button><div><button class="btn" onclick="downloadJSON()">Exportar JSON</button> <button class="btn primary" onclick="window.print()">Imprimir / PDF</button></div></div></div>'+
+'<div class="actions"><button class="btn" onclick="go(6)">← Editar</button><div><button class="btn" onclick="downloadJSON()">Exportar JSON</button> <button class="btn primary" onclick="go(8)">Ver inversión e impacto →</button></div></div></div>'+
 '<div class="card"><h2>Siguiente fase</h2><p>La exportación directa al libro Excel completo se mantiene en la versión avanzada. Este MVP web valida captura guiada, ayudas, consistencia y estructura del registro.</p></div>'
 }
+
+function num(v){const n=parseFloat(String(v??'').replace(',','.'));return Number.isFinite(n)?n:0}
+function compact(v){return new Intl.NumberFormat('es-CO',{notation:'compact',maximumFractionDigits:1}).format(num(v))}
+function pct1(v){return (num(v)||0).toLocaleString('es-CO',{maximumFractionDigits:1})+'%'}
+function ensureYears(){const a=Math.round(num(state.project.start)||2027),b=Math.round(num(state.project.end)||a+4);if(!state.impact.year||state.impact.year<a||state.impact.year>b)state.impact.year=a;return [a,b]}
+function impactView(){
+ const [a,b]=ensureYears();
+ return '<div class="impact-head"><div><div class="eyebrow" style="color:var(--teal)">Explorador progresivo</div><h2>De la inversión a la población</h2><div class="help">Observe cómo recursos, compras/servicios y cobertura evolucionan en el tiempo. “Impacto” solo se usa como resultado modelado cuando existe soporte suficiente.</div></div>'+
+ '<div class="yearbox"><label>Año de análisis: <b id="yearLabel">'+state.impact.year+'</b></label><input id="yearSlider" type="range" min="'+a+'" max="'+b+'" step="1" value="'+state.impact.year+'" oninput="state.impact.year=this.value;document.getElementById(\'yearLabel\').textContent=this.value;save(false);renderImpact();loadDaneMap()"><div class="help">'+a+' — '+b+'</div></div></div>'+
+ territoryEditor()+
+ '<div id="impactDash"><div class="empty">Agregue al menos un registro territorial para activar la visualización.</div></div>'+
+ '<div class="actions"><button class="btn" onclick="go(7)">← Volver a revisión</button><button class="btn primary" onclick="downloadJSON()">Exportar respaldo</button></div>';
+}
+function territoryEditor(){
+ return '<div class="card"><h3>Registros territoriales por año</h3><p class="note">Use un registro por territorio y año. Los códigos DIVIPOLA permiten ubicarlo en el mapa oficial del DANE. Si “personas alcanzadas” es una proyección, marque <b>Estimado</b>.</p>'+
+ '<div class="territory-form">'+
+ '<div><label>Año</label><input id="trYear" type="number" value="'+state.impact.year+'"></div>'+
+ '<div><label>Cód. departamento</label><input id="trDpto" maxlength="2" placeholder="11"></div>'+
+ '<div class="wide"><label>Departamento</label><input id="trDptoName" placeholder="Bogotá D.C."></div>'+
+ '<div><label>Cód. municipio</label><input id="trMpio" maxlength="3" placeholder="001"></div>'+
+ '<div class="wide"><label>Municipio</label><input id="trMpioName" placeholder="Bogotá D.C."></div>'+
+ '<div><label>Inversión (COP)</label><input id="trInv" type="number" min="0" placeholder="100000000"></div>'+
+ '<div><label>Compras / productos</label><input id="trBuy" type="number" min="0" placeholder="2500"></div>'+
+ '<div><label>Servicios</label><input id="trSrv" type="number" min="0" placeholder="1800"></div>'+
+ '<div><label>Personas alcanzadas</label><input id="trReach" type="number" min="0" placeholder="1250"></div>'+
+ '<div><label>Tipo de dato</label><select id="trStatus"><option value="observed">Observado</option><option value="estimated">Estimado</option></select></div>'+
+ '<div class="mini-actions"><button class="btn primary" onclick="addTerritory()">+ Agregar registro</button></div></div>'+
+ '<div class="source-line">Cartografía: DIVIPOLA / Marco Geoestadístico Nacional 2025, DANE. Los datos de inversión, compras, servicios y personas provienen de los registros que usted diligencie.</div></div>';
+}
+function addTerritory(){
+ const y=Math.round(num(document.getElementById('trYear').value));
+ const rec={id:Date.now(),year:y,dptoCode:(document.getElementById('trDpto').value||'').padStart(2,'0'),department:document.getElementById('trDptoName').value.trim(),mpioCode:(document.getElementById('trMpio').value||'').padStart(3,'0'),municipality:document.getElementById('trMpioName').value.trim(),investment:num(document.getElementById('trInv').value),purchases:num(document.getElementById('trBuy').value),services:num(document.getElementById('trSrv').value),reached:num(document.getElementById('trReach').value),status:document.getElementById('trStatus').value};
+ if(!y||!rec.dptoCode||!rec.department){alert('Complete año, código y nombre del departamento.');return}
+ state.territories.push(rec);state.impact.year=y;save(false);render();go(8);
+}
+function removeTerritory(id){state.territories=state.territories.filter(x=>x.id!==id);save(false);renderImpact();loadDaneMap()}
+function impactRows(){
+ const y=Math.round(num(state.impact.year));return state.territories.filter(r=>num(r.year)<=y);
+}
+function impactCurrentRows(){const y=Math.round(num(state.impact.year));return state.territories.filter(r=>num(r.year)===y)}
+function totals(rows){return rows.reduce((a,r)=>({investment:a.investment+num(r.investment),purchases:a.purchases+num(r.purchases),services:a.services+num(r.services),reached:a.reached+num(r.reached)}),{investment:0,purchases:0,services:0,reached:0})}
+function ageDistribution(reached){
+ const shares=[['10–14',num(state.population.a1014)],['15–19',num(state.population.a1519)],['20–24',num(state.population.a2024)],['25–34',num(state.population.a2534)],['35–49',num(state.population.a3549)]];
+ const sum=shares.reduce((a,x)=>a+x[1],0);return shares.map(x=>({label:x[0],pct:sum?x[1]/sum*100:0,n:sum?reached*x[1]/sum:0}));
+}
+function renderImpact(){
+ const root=document.getElementById('impactDash');if(!root)return;
+ const all=impactRows(),cur=impactCurrentRows(),ta=totals(all),tc=totals(cur);
+ if(!state.territories.length){root.innerHTML='<div class="empty">Agregue al menos un registro territorial para activar la visualización.</div>';return}
+ const cpp=ta.reached?ta.investment/ta.reached:0;
+ const age=ageDistribution(ta.reached);
+ const maxAge=Math.max(1,...age.map(x=>x.pct));
+ root.innerHTML=
+ '<div class="kpis">'+
+ kpi(money(ta.investment),'Inversión acumulada','Hasta '+state.impact.year)+
+ kpi(compact(ta.purchases),'Compras / productos','Acumulado')+
+ kpi(compact(ta.reached),'Personas alcanzadas','Observadas + estimadas')+
+ kpi(ta.reached?money(cpp):'—','COP por persona','Inversión / alcanzadas')+'</div>'+
+ '<div class="flow">'+flowNode(money(tc.investment),'Inversión '+state.impact.year)+arrow()+flowNode(compact(tc.purchases),'Compras / productos')+arrow()+flowNode(compact(tc.services),'Servicios')+arrow()+flowNode(compact(tc.reached),'Personas alcanzadas')+'</div>'+
+ '<div class="impact-grid"><div class="panel"><h3>Distribución poblacional acumulada</h3><div class="help">Estimación proporcional basada en los porcentajes diligenciados en “Población”. No sustituye conteos reales por edad.</div>'+
+ age.map(x=>'<div class="agebar"><b>'+x.label+'</b><div class="track"><i style="width:'+(x.pct/maxAge*100)+'%"></i></div><span>'+compact(x.n)+' · '+x.pct.toFixed(1)+'%</span></div>').join('')+
+ '</div><div class="panel"><h3>Mapa territorial</h3><div style="display:flex;gap:8px;margin-bottom:10px"><select id="mapMetric" onchange="state.impact.metric=this.value;save(false);drawDaneMap()" style="max-width:220px"><option value="investment" '+(state.impact.metric==='investment'?'selected':'')+'>Inversión</option><option value="reached" '+(state.impact.metric==='reached'?'selected':'')+'>Personas alcanzadas</option><option value="services" '+(state.impact.metric==='services'?'selected':'')+'>Servicios</option></select><select id="mapLevel" onchange="state.impact.mapLevel=this.value;save(false);loadDaneMap()" style="max-width:180px"><option value="department" '+(state.impact.mapLevel==='department'?'selected':'')+'>Departamentos</option><option value="municipality" '+(state.impact.mapLevel==='municipality'?'selected':'')+'>Municipios</option></select></div><div class="mapbox"><svg id="coMap" viewBox="0 0 500 520" role="img" aria-label="Mapa de Colombia"></svg><div class="map-tip" id="mapTip"></div><div class="map-status" id="mapStatus">Cargando cartografía DANE…</div></div><div class="legend"><span>Menor</span><div class="grad"></div><span>Mayor</span></div><div class="source-line">Fuente cartográfica: DANE, DIVIPOLA MGN 2025.</div></div></div>'+
+ '<div class="panel" style="margin-top:16px"><h3>Detalle territorial</h3>'+territoryTable()+'</div>'+
+ '<div class="panel" style="margin-top:16px"><h3>Lectura del año '+state.impact.year+'</h3><p>'+impactNarrative(tc,ta)+'</p><div class="note warn"><b>Interpretación:</b> inversión, compras y servicios pueden ser datos observados; “personas alcanzadas” depende del estado que marque cada registro. Esta vista no convierte cobertura en efecto causal sanitario.</div></div>';
+}
+function kpi(v,l,s){return '<div class="kpi"><div class="v">'+v+'</div><div class="l">'+l+'</div><div class="s">'+s+'</div></div>'}
+function flowNode(v,l){return '<div class="flow-node"><b>'+v+'</b><small>'+l+'</small></div>'}
+function arrow(){return '<div class="arrow">→</div>'}
+function territoryTable(){
+ const rows=[...state.territories].sort((a,b)=>a.year-b.year||a.dptoCode.localeCompare(b.dptoCode));
+ if(!rows.length)return '<div class="empty">Sin registros.</div>';
+ return '<div class="table-wrap"><table class="impact-table"><thead><tr><th>Año</th><th>Territorio</th><th>Inversión</th><th>Compras</th><th>Servicios</th><th>Personas</th><th>Estado</th><th></th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+r.year+'</td><td><b>'+esc(r.department)+'</b>'+(r.municipality?'<br><small>'+esc(r.municipality)+' · '+r.dptoCode+r.mpioCode+'</small>':'<br><small>DP '+r.dptoCode+'</small>')+'</td><td>'+money(r.investment)+'</td><td>'+compact(r.purchases)+'</td><td>'+compact(r.services)+'</td><td>'+compact(r.reached)+'</td><td><span class="badge '+(r.status==='observed'?'obs':'est')+'">'+(r.status==='observed'?'Observado':'Estimado')+'</span></td><td><button class="btn" onclick="removeTerritory('+r.id+')" style="padding:5px 8px">×</button></td></tr>').join('')+'</tbody></table></div>';
+}
+function impactNarrative(cur,acc){
+ const share=acc.investment?cur.investment/acc.investment*100:0;
+ const observed=impactCurrentRows().filter(r=>r.status==='observed').reduce((a,r)=>a+num(r.reached),0);
+ const est=impactCurrentRows().filter(r=>r.status==='estimated').reduce((a,r)=>a+num(r.reached),0);
+ return 'En <b>'+state.impact.year+'</b> se registran <b>'+money(cur.investment)+'</b> de inversión ('+share.toFixed(1)+'% del acumulado cargado), asociados a <b>'+compact(cur.services)+'</b> servicios y <b>'+compact(cur.reached)+'</b> personas alcanzadas. De estas, <b>'+compact(observed)+'</b> están marcadas como observadas y <b>'+compact(est)+'</b> como estimadas.';
+}
+async function loadDaneMap(){
+ if(current!==8)return;
+ const level=state.impact.mapLevel||'department';
+ try{
+  const layer=level==='municipality'?'317':'319';
+  const fields=level==='municipality'?'DPTO_CCDGO,MPIO_CCDGO,MPIO_CDPMP,MPIO_CNMBRE':'DPTO_CCDGO,DPTO_CNMBRE';
+  const url='https://geoportal.dane.gov.co/mparcgis/rest/services/Divipola/Serv_DIVIPOLA_MGN_2025/FeatureServer/'+layer+'/query?where=1%3D1&outFields='+encodeURIComponent(fields)+'&returnGeometry=true&outSR=4326&f=geojson';
+  const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);daneGeo=await r.json();daneLevel=level;drawDaneMap();
+ }catch(e){const s=document.getElementById('mapStatus');if(s)s.textContent='No fue posible cargar DIVIPOLA. La tabla sigue disponible.'}
+}
+function drawDaneMap(){
+ const svg=document.getElementById('coMap');if(!svg||!daneGeo)return;
+ const level=state.impact.mapLevel||'department',metric=state.impact.metric||'investment',year=Math.round(num(state.impact.year));
+ let rows=state.territories.filter(r=>num(r.year)<=year);
+ const agg={};rows.forEach(r=>{const key=level==='municipality'?(r.dptoCode+r.mpioCode):r.dptoCode;if(!key)return;if(!agg[key])agg[key]={investment:0,reached:0,services:0,purchases:0};agg[key].investment+=num(r.investment);agg[key].reached+=num(r.reached);agg[key].services+=num(r.services);agg[key].purchases+=num(r.purchases)});
+ const vals=Object.values(agg).map(x=>x[metric]);const max=Math.max(1,...vals);
+ const feats=daneGeo.features||[];let xs=[],ys=[];
+ function coords(g){if(!g)return[];const arr=g.type==='Polygon'?g.coordinates:g.coordinates.flat();return arr.flat().filter(x=>Array.isArray(x)&&typeof x[0]==='number')}
+ feats.forEach(f=>coords(f.geometry).forEach(p=>{xs.push(p[0]);ys.push(p[1])}));
+ const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),pad=18,W=500,H=520;
+ const proj=p=>[pad+(p[0]-minX)/(maxX-minX)*(W-2*pad),H-pad-(p[1]-minY)/(maxY-minY)*(H-2*pad)];
+ function path(g){const polys=g.type==='Polygon'?[g.coordinates]:g.coordinates;return polys.map(poly=>poly.map(ring=>'M'+ring.map(p=>proj(p).map(n=>n.toFixed(1)).join(',')).join('L')+'Z').join('')).join('')}
+ function color(v){if(!v)return '#E7EEEE';const t=Math.min(1,v/max);const a=[220,238,238],b=[8,122,126];return 'rgb('+a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')+')'}
+ svg.innerHTML=feats.map((f,i)=>{const p=f.properties||{};const key=level==='municipality'?String(p.MPIO_CDPMP||((p.DPTO_CCDGO||'')+(p.MPIO_CCDGO||''))):String(p.DPTO_CCDGO||'');const v=agg[key]?.[metric]||0;const name=level==='municipality'?(p.MPIO_CNMBRE||key):(p.DPTO_CNMBRE||key);return '<path d="'+path(f.geometry)+'" fill="'+color(v)+'" stroke="#ffffff" stroke-width="'+(level==='municipality'?'.25':'.8')+'" data-name="'+esc(name)+'" data-key="'+key+'" data-val="'+v+'" onmousemove="mapHover(evt,this)" onmouseleave="mapLeave()" style="cursor:pointer"></path>'}).join('');
+ const st=document.getElementById('mapStatus');if(st)st.textContent=(level==='municipality'?'Municipios':'Departamentos')+' · acumulado a '+year;
+}
+function mapHover(evt,el){const tip=document.getElementById('mapTip');if(!tip)return;const label={investment:'Inversión',reached:'Personas',services:'Servicios'}[state.impact.metric]||'Valor';const v=num(el.dataset.val);tip.innerHTML='<b>'+esc(el.dataset.name)+'</b><br>'+label+': '+(state.impact.metric==='investment'?money(v):compact(v));tip.style.display='block';const box=evt.currentTarget.ownerSVGElement.getBoundingClientRect();tip.style.left=Math.min(box.width-200,evt.clientX-box.left+12)+'px';tip.style.top=Math.max(8,evt.clientY-box.top-38)+'px'}
+function mapLeave(){const tip=document.getElementById('mapTip');if(tip)tip.style.display='none'}
+
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function money(v){const n=parseFloat(v);return Number.isFinite(n)?new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n):'No definido'}
 function metrics(){const keys=[state.project.name,state.project.territory,state.project.question,state.resources.budget,state.resources.capacity,state.channels.digitalContacts,state.scenario.continuity,state.population.a1519,state.services.method,state.services.source];const done=keys.filter(v=>String(v||'').trim()).length;const p=Math.round(done/keys.length*100);document.getElementById('bar').style.width=p+'%';document.getElementById('pct').textContent=p+'%';document.getElementById('pend').textContent=keys.length-done;document.getElementById('stepNow').textContent=steps[current][0]}
 function save(show=true){localStorage.setItem('impacta-web',JSON.stringify(state));if(show)alert('Borrador guardado en este navegador.')}
-function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.0',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
+function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.1 - Explorador de inversión e impacto',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
 function go(i){current=i;render()}
 nav();render();
 </script>
