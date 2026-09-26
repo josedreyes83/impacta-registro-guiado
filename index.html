@@ -32,7 +32,12 @@ footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
 .segment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.segment-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}.segment-card h4{margin:0 0 8px;font-size:12px}.segment-total{font-size:10px;color:var(--slate);margin-top:8px}.segbar{display:grid;grid-template-columns:minmax(86px,1fr) 2fr 72px;gap:8px;align-items:center;margin:8px 0;font-size:10px}.segbar .track{height:9px}
 .priority-wrap{display:flex;gap:7px;flex-wrap:wrap}.priority-chip{background:#f3f7f7;border:1px solid #dbe7e7;border-radius:999px;padding:7px 10px;font-size:10px}.priority-chip b{color:var(--teal)}
 .dim-note{font-size:10px;color:var(--slate);padding:10px 12px;background:#f8fbfb;border-radius:8px;border:1px solid #e4eeee}
-@media(max-width:850px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{display:flex;overflow:auto}nav button{min-width:155px}.hero{grid-template-columns:1fr}.grid,.stats,.kpis,.impact-grid{grid-template-columns:1fr}main{padding:20px}.hero h1{font-size:33px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.territory-form{grid-template-columns:1fr 1fr}.territory-form .wide{grid-column:span 2}.mapbox,.mapbox svg{height:360px;min-height:360px}.segment-grid{grid-template-columns:1fr}.segbar{grid-template-columns:86px 1fr 68px}}
+.matrix-controls{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}.matrix-controls label{font-size:10px}.matrix-controls select{padding:9px;font-size:11px}
+.matrix-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}.matrix-chart{position:relative;height:430px;background:linear-gradient(180deg,#fbfdfd,#f5f9f9);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.matrix-chart svg{width:100%;height:100%;display:block}.matrix-tip{position:absolute;display:none;pointer-events:none;background:var(--ink);color:#fff;padding:9px 10px;border-radius:8px;font-size:10px;z-index:5;max-width:230px}
+.quad-list{display:grid;gap:9px}.quad{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}.quad b{display:block;font-size:12px}.quad small{color:var(--slate)}.quad-risk{border-left:4px solid #C46A3B}.quad-opportunity{border-left:4px solid var(--honey)}.quad-efficient{border-left:4px solid var(--teal)}.quad-watch{border-left:4px solid #8395A7}
+.matrix-table td:nth-child(n+3){text-align:right}.matrix-tag{display:inline-block;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:700}.tag-risk{background:#FBEAE1;color:#8B4524}.tag-opportunity{background:#FFF4D6;color:#76520A}.tag-efficient{background:#E5F4EF;color:#176146}.tag-watch{background:#EDF1F4;color:#52616F}
+@media(max-width:850px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{display:flex;overflow:auto}nav button{min-width:155px}.hero{grid-template-columns:1fr}.grid,.stats,.kpis,.impact-grid{grid-template-columns:1fr}main{padding:20px}.hero h1{font-size:33px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.territory-form{grid-template-columns:1fr 1fr}.territory-form .wide{grid-column:span 2}.mapbox,.mapbox svg{height:360px;min-height:360px}.segment-grid{grid-template-columns:1fr}.segbar{grid-template-columns:86px 1fr 68px}.matrix-controls,.matrix-wrap{grid-template-columns:1fr}.matrix-chart{height:380px}}
 </style>
 </head>
 <body>
@@ -62,13 +67,16 @@ footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
 const steps=[
 ['Inicio','Panorama del registro'],['Tu proyecto','Alcance y pregunta'],['Recursos','Presupuesto y capacidad'],['Canales','Captación y referencias'],['Escenarios','Supuestos del modelo'],['Población','Grupos etarios'],['Servicios','Información agregada'],['Revisar','Validar y exportar'],['Impacto','Inversión → población']
 ];
-const defaults={project:{name:'',org:'',territory:'',question:'',start:2027,end:2031},resources:{budget:'',fixed:'',capacity:'',serviceCost:'',followup:'',retention:''},channels:{digitalContacts:'',digitalConv:'',institutionalContacts:'',institutionalConv:'',communityContacts:'',communityConv:''},scenario:{additionality:'',continuity:'',healthCoeff:'',discount:''},population:{a1014:'',a1519:'',a2024:'',a2534:'',a3549:'',sexWomen:'',sexMen:'',sexOther:'',genderWomen:'',genderMen:'',genderNonBinary:'',genderOther:'',genderNoInfo:'',ethIndigenous:'',ethRom:'',ethRaizal:'',ethPalenquero:'',ethAfro:'',ethNone:'',ethNoInfo:'',areaUrban:'',areaCenter:'',areaRural:''},priority:{adolescents:'',migrants:'',disability:'',victims:'',ruralPriority:'',pregnant:'',otherLabel:'',otherValue:''},services:{method:'',quantity:'',unit:'',source:''},territories:[],impact:{year:'',metric:'investment',mapLevel:'department'}};
+const defaults={project:{name:'',org:'',territory:'',question:'',start:2027,end:2031},resources:{budget:'',fixed:'',capacity:'',serviceCost:'',followup:'',retention:''},channels:{digitalContacts:'',digitalConv:'',institutionalContacts:'',institutionalConv:'',communityContacts:'',communityConv:''},scenario:{additionality:'',continuity:'',healthCoeff:'',discount:''},population:{a1014:'',a1519:'',a2024:'',a2534:'',a3549:'',sexWomen:'',sexMen:'',sexOther:'',genderWomen:'',genderMen:'',genderNonBinary:'',genderOther:'',genderNoInfo:'',ethIndigenous:'',ethRom:'',ethRaizal:'',ethPalenquero:'',ethAfro:'',ethNone:'',ethNoInfo:'',areaUrban:'',areaCenter:'',areaRural:''},priority:{adolescents:'',migrants:'',disability:'',victims:'',ruralPriority:'',pregnant:'',otherLabel:'',otherValue:''},services:{method:'',quantity:'',unit:'',source:''},territories:[],impact:{year:'',metric:'investment',mapLevel:'department',segment:'age',matrixService:'all',matrixTerritory:'all',matrixPopulation:'all'}};
 let state=JSON.parse(localStorage.getItem('impacta-web')||'null')||structuredClone(defaults); 
 if(!state.territories) state.territories=[];
 if(!state.priority) state.priority={adolescents:'',migrants:'',disability:'',victims:'',ruralPriority:'',pregnant:'',otherLabel:'',otherValue:''};
 Object.keys(defaults.population).forEach(k=>{if(state.population[k]===undefined)state.population[k]=''});
-if(!state.impact) state.impact={year:'',metric:'investment',mapLevel:'department',segment:'age'};
+if(!state.impact) state.impact={year:'',metric:'investment',mapLevel:'department',segment:'age',matrixService:'all',matrixTerritory:'all',matrixPopulation:'all'};
 if(!state.impact.segment) state.impact.segment='age';
+if(!state.impact.matrixService) state.impact.matrixService='all';
+if(!state.impact.matrixTerritory) state.impact.matrixTerritory='all';
+if(!state.impact.matrixPopulation) state.impact.matrixPopulation='all';
 let current=0; let daneGeo=null; let daneLevel='department';
 function nav(){document.getElementById('nav').innerHTML=steps.map((s,i)=>'<button class="'+(i===current?'active':'')+'" onclick="go('+i+')"><span class="n">'+i+'</span><span><b>'+s[0]+'</b><br><small>'+s[1]+'</small></span></button>').join('')}
 function field(group,key,label,help,type='text',extra=''){const v=(state[group]&&state[group][key])??'';return '<div '+(extra==='full'?'class="full"':'')+'><label>'+label+'</label><input type="'+type+'" value="'+v+'" oninput="setv(\''+group+'\',\''+key+'\',this.value)" aria-label="'+label.replace(/<[^>]+>/g,'')+'"><div class="help">'+help+'</div></div>'}
@@ -196,7 +204,7 @@ function territoryEditor(){
  '<div class="wide"><label>Departamento</label><input id="trDptoName" placeholder="Bogotá D.C."></div>'+
  '<div><label>Cód. municipio</label><input id="trMpio" maxlength="3" placeholder="001"></div>'+
  '<div class="wide"><label>Municipio</label><input id="trMpioName" placeholder="Bogotá D.C."></div>'+
- '<div><label>Inversión (COP)</label><input id="trInv" type="number" min="0" placeholder="100000000"></div>'+
+ '<div><label>Servicio / línea</label><input id="trService" placeholder="Implantes / educación / consulta"></div>'+ '<div><label>Población objetivo</label><input id="trNeed" type="number" min="0" placeholder="5000"></div>'+ '<div><label>Inversión (COP)</label><input id="trInv" type="number" min="0" placeholder="100000000"></div>'+
  '<div><label>Compras / productos</label><input id="trBuy" type="number" min="0" placeholder="2500"></div>'+
  '<div><label>Servicios</label><input id="trSrv" type="number" min="0" placeholder="1800"></div>'+
  '<div><label>Personas alcanzadas</label><input id="trReach" type="number" min="0" placeholder="1250"></div>'+
@@ -206,7 +214,7 @@ function territoryEditor(){
 }
 function addTerritory(){
  const y=Math.round(num(document.getElementById('trYear').value));
- const rec={id:Date.now(),year:y,dptoCode:(document.getElementById('trDpto').value||'').padStart(2,'0'),department:document.getElementById('trDptoName').value.trim(),mpioCode:(document.getElementById('trMpio').value||'').padStart(3,'0'),municipality:document.getElementById('trMpioName').value.trim(),investment:num(document.getElementById('trInv').value),purchases:num(document.getElementById('trBuy').value),services:num(document.getElementById('trSrv').value),reached:num(document.getElementById('trReach').value),status:document.getElementById('trStatus').value};
+ const rec={id:Date.now(),year:y,dptoCode:(document.getElementById('trDpto').value||'').padStart(2,'0'),department:document.getElementById('trDptoName').value.trim(),mpioCode:(document.getElementById('trMpio').value||'').padStart(3,'0'),municipality:document.getElementById('trMpioName').value.trim(),service:document.getElementById('trService').value.trim()||'General',need:num(document.getElementById('trNeed').value),investment:num(document.getElementById('trInv').value),purchases:num(document.getElementById('trBuy').value),services:num(document.getElementById('trSrv').value),reached:num(document.getElementById('trReach').value),status:document.getElementById('trStatus').value};
  if(!y||!rec.dptoCode||!rec.department){alert('Complete año, código y nombre del departamento.');return}
  state.territories.push(rec);state.impact.year=y;save(false);render();go(8);
 }
@@ -215,7 +223,7 @@ function impactRows(){
  const y=Math.round(num(state.impact.year));return state.territories.filter(r=>num(r.year)<=y);
 }
 function impactCurrentRows(){const y=Math.round(num(state.impact.year));return state.territories.filter(r=>num(r.year)===y)}
-function totals(rows){return rows.reduce((a,r)=>({investment:a.investment+num(r.investment),purchases:a.purchases+num(r.purchases),services:a.services+num(r.services),reached:a.reached+num(r.reached)}),{investment:0,purchases:0,services:0,reached:0})}
+function totals(rows){return rows.reduce((a,r)=>({investment:a.investment+num(r.investment),purchases:a.purchases+num(r.purchases),services:a.services+num(r.services),reached:a.reached+num(r.reached),need:a.need+num(r.need)}),{investment:0,purchases:0,services:0,reached:0,need:0})}
 function ageDistribution(reached){
  const shares=[['10–14',num(state.population.a1014)],['15–19',num(state.population.a1519)],['20–24',num(state.population.a2024)],['25–34',num(state.population.a2534)],['35–49',num(state.population.a3549)]];
  const sum=shares.reduce((a,x)=>a+x[1],0);return shares.map(x=>({label:x[0],pct:sum?x[1]/sum*100:0,n:sum?reached*x[1]/sum:0}));
@@ -247,6 +255,44 @@ function priorityPanel(){
  return rows.length?'<div class="priority-wrap">'+rows.map(x=>'<span class="priority-chip">'+esc(x[0])+': <b>'+compact(x[1])+'</b></span>').join('')+'</div><div class="source-line">Las etiquetas pueden solaparse; no se suman como personas únicas.</div>':'<div class="empty">No hay poblaciones priorizadas registradas.</div>';
 }
 
+
+function uniqueVals(key){return [...new Set(state.territories.map(r=>String(r[key]||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'))}
+function matrixFilteredRows(){
+ const y=Math.round(num(state.impact.year));return state.territories.filter(r=>{
+  if(num(r.year)>y)return false;
+  if(state.impact.matrixService!=='all'&&String(r.service||'General')!==state.impact.matrixService)return false;
+  if(state.impact.matrixTerritory!=='all'&&String(r.dptoCode)!==state.impact.matrixTerritory)return false;
+  return true;
+ });
+}
+function matrixAggregate(){
+ const rows=matrixFilteredRows(),by={};
+ rows.forEach(r=>{const key=(r.dptoCode||'')+'|'+(r.mpioCode||'')+'|'+(r.service||'General');if(!by[key])by[key]={key,department:r.department,municipality:r.municipality,dptoCode:r.dptoCode,mpioCode:r.mpioCode,service:r.service||'General',investment:0,reached:0,need:0,services:0,purchases:0};by[key].investment+=num(r.investment);by[key].reached+=num(r.reached);by[key].need+=num(r.need);by[key].services+=num(r.services);by[key].purchases+=num(r.purchases)});
+ const arr=Object.values(by).filter(x=>x.investment||x.reached||x.need);
+ const avgInv=arr.length?arr.reduce((a,x)=>a+x.investment,0)/arr.length:0;
+ const avgCov=arr.length?arr.reduce((a,x)=>a+(x.need?Math.min(1,x.reached/x.need):0),0)/arr.length:0;
+ return arr.map(x=>{const coverage=x.need?x.reached/x.need:0;const invIndex=avgInv?x.investment/avgInv:0;let quad='watch';if(invIndex>=1&&coverage<avgCov)quad='risk';else if(invIndex<1&&coverage<avgCov)quad='opportunity';else if(invIndex<=1&&coverage>=avgCov)quad='efficient';return {...x,coverage,invIndex,avgInv,avgCov,quad,costPerReached:x.reached?x.investment/x.reached:0,gap:Math.max(0,x.need-x.reached)}})
+}
+function matrixControls(){
+ const services=uniqueVals('service'),dptos=[...new Map(state.territories.map(r=>[r.dptoCode,r.department])).entries()].filter(x=>x[0]);
+ return '<div class="matrix-controls"><div><label>Servicio / línea</label><select onchange="state.impact.matrixService=this.value;save(false);renderImpact()"><option value="all">Todos</option>'+services.map(v=>'<option value="'+esc(v)+'" '+(state.impact.matrixService===v?'selected':'')+'>'+esc(v)+'</option>').join('')+'</select></div><div><label>Territorio</label><select onchange="state.impact.matrixTerritory=this.value;save(false);renderImpact()"><option value="all">Todos</option>'+dptos.map(x=>'<option value="'+esc(x[0])+'" '+(state.impact.matrixTerritory===x[0]?'selected':'')+'>'+esc(x[1])+'</option>').join('')+'</select></div><div><label>Eje X</label><select disabled><option>Intensidad de inversión</option></select></div><div><label>Eje Y</label><select disabled><option>Cobertura de necesidad</option></select></div></div>';
+}
+function quadLabel(q){return {risk:'Alta inversión / baja cobertura',opportunity:'Baja inversión / baja cobertura',efficient:'Baja inversión / alta cobertura',watch:'Alta inversión / alta cobertura'}[q]||q}
+function quadClass(q){return {risk:'tag-risk',opportunity:'tag-opportunity',efficient:'tag-efficient',watch:'tag-watch'}[q]||'tag-watch'}
+function matrixView(){
+ const arr=matrixAggregate();if(!arr.length)return '<div class="panel" style="margin-top:16px"><h3>Matriz inversión × necesidad</h3>'+matrixControls()+'<div class="empty">Agregue población objetivo/necesidad en los registros territoriales para analizar brechas.</div></div>';
+ const maxInv=Math.max(1,...arr.map(x=>x.invIndex)),maxCov=Math.max(1,...arr.map(x=>x.coverage));
+ const circles=arr.map((x,i)=>{const px=55+(x.invIndex/maxInv)*390,py=360-(Math.min(1.2,x.coverage)/1.2)*300,rad=Math.max(6,Math.min(18,6+Math.sqrt(x.reached)/8));const colors={risk:'#C46A3B',opportunity:'#E7B65A',efficient:'#087A7E',watch:'#8395A7'};const name=x.municipality||x.department;return '<circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="'+rad.toFixed(1)+'" fill="'+colors[x.quad]+'" fill-opacity=".78" stroke="#fff" stroke-width="2" data-i="'+i+'" onmousemove="matrixHover(evt,'+i+')" onmouseleave="matrixLeave()"></circle><text x="'+(px+rad+3).toFixed(1)+'" y="'+(py+3).toFixed(1)+'" font-size="9" fill="#52616F">'+esc(name)+'</text>'}).join('');
+ const avgCov=arr[0]?.avgCov||0;
+ return '<div class="panel" style="margin-top:16px"><div class="impact-head"><div><h3>Matriz inversión × territorio × necesidad</h3><div class="help">Cada punto representa territorio + servicio. El tamaño aproxima personas alcanzadas.</div></div></div>'+matrixControls()+
+ '<div class="matrix-wrap"><div class="matrix-chart"><svg viewBox="0 0 500 410" aria-label="Matriz de inversión y cobertura"><rect x="55" y="60" width="195" height="150" fill="#EDF6F3"></rect><rect x="250" y="60" width="195" height="150" fill="#EEF1F4"></rect><rect x="55" y="210" width="195" height="150" fill="#FFF8E6"></rect><rect x="250" y="210" width="195" height="150" fill="#FBEDE6"></rect><line x1="250" y1="45" x2="250" y2="365" stroke="#9FB0B8" stroke-dasharray="5 4"></line><line x1="55" y1="'+(360-(Math.min(1.2,avgCov)/1.2)*300).toFixed(1)+'" x2="455" y2="'+(360-(Math.min(1.2,avgCov)/1.2)*300).toFixed(1)+'" stroke="#9FB0B8" stroke-dasharray="5 4"></line><text x="70" y="78" font-size="10" fill="#176146">Baja inversión · alta cobertura</text><text x="275" y="78" font-size="10" fill="#52616F">Alta inversión · alta cobertura</text><text x="70" y="340" font-size="10" fill="#76520A">Baja inversión · baja cobertura</text><text x="275" y="340" font-size="10" fill="#8B4524">Alta inversión · baja cobertura</text><text x="190" y="400" font-size="10" fill="#52616F">Intensidad de inversión →</text><text transform="translate(14,260) rotate(-90)" font-size="10" fill="#52616F">Cobertura de necesidad →</text>'+circles+'</svg><div class="matrix-tip" id="matrixTip"></div></div>'+
+ '<div class="quad-list">'+['risk','opportunity','efficient','watch'].map(q=>{const xs=arr.filter(x=>x.quad===q);const gaps=xs.reduce((a,x)=>a+x.gap,0);return '<div class="quad '+(q==='risk'?'quad-risk':q==='opportunity'?'quad-opportunity':q==='efficient'?'quad-efficient':'quad-watch')+'"><b>'+quadLabel(q)+'</b><small>'+xs.length+' combinaciones · brecha '+compact(gaps)+' personas</small></div>'}).join('')+'</div></div>'+
+ '<div class="table-wrap" style="margin-top:14px"><table class="impact-table matrix-table"><thead><tr><th>Territorio</th><th>Servicio</th><th>Inversión</th><th>Necesidad</th><th>Alcanzadas</th><th>Cobertura</th><th>Costo/persona</th><th>Lectura</th></tr></thead><tbody>'+arr.sort((a,b)=>b.gap-a.gap).map(x=>'<tr><td><b>'+esc(x.municipality||x.department)+'</b></td><td>'+esc(x.service)+'</td><td>'+money(x.investment)+'</td><td>'+compact(x.need)+'</td><td>'+compact(x.reached)+'</td><td>'+((x.coverage||0)*100).toFixed(1)+'%</td><td>'+(x.reached?money(x.costPerReached):'—')+'</td><td><span class="matrix-tag '+quadClass(x.quad)+'">'+quadLabel(x.quad)+'</span></td></tr>').join('')+'</tbody></table></div>'+
+ '<div class="dim-note" style="margin-top:12px"><b>Cómo leerla:</b> los umbrales son relativos a los registros filtrados. “Alta/baja inversión” compara cada combinación con la inversión media; “alta/baja cobertura” compara cobertura con la cobertura media. No es una calificación de desempeño ni una estimación causal.</div></div>';
+}
+function matrixHover(evt,i){const tip=document.getElementById('matrixTip'),x=matrixAggregate()[i];if(!tip||!x)return;tip.innerHTML='<b>'+esc(x.municipality||x.department)+'</b><br>'+esc(x.service)+'<br>Inversión: '+money(x.investment)+'<br>Necesidad: '+compact(x.need)+'<br>Alcanzadas: '+compact(x.reached)+'<br>Cobertura: '+(x.coverage*100).toFixed(1)+'%';tip.style.display='block';const box=evt.currentTarget.ownerSVGElement.getBoundingClientRect();tip.style.left=Math.min(box.width-220,evt.clientX-box.left+12)+'px';tip.style.top=Math.max(8,evt.clientY-box.top-55)+'px'}
+function matrixLeave(){const tip=document.getElementById('matrixTip');if(tip)tip.style.display='none'}
+
 function renderImpact(){
  const root=document.getElementById('impactDash');if(!root)return;
  const all=impactRows(),cur=impactCurrentRows(),ta=totals(all),tc=totals(cur);
@@ -257,11 +303,12 @@ function renderImpact(){
  kpi(money(ta.investment),'Inversión acumulada','Hasta '+state.impact.year)+
  kpi(compact(ta.purchases),'Compras / productos','Acumulado')+
  kpi(compact(ta.reached),'Personas alcanzadas','Observadas + estimadas')+
- kpi(ta.reached?money(cpp):'—','COP por persona','Inversión / alcanzadas')+'</div>'+
+ kpi(ta.need?((ta.reached/ta.need)*100).toFixed(1)+'%':'—','Cobertura de necesidad','Alcanzadas / objetivo')+'</div>'+
  '<div class="flow">'+flowNode(money(tc.investment),'Inversión '+state.impact.year)+arrow()+flowNode(compact(tc.purchases),'Compras / productos')+arrow()+flowNode(compact(tc.services),'Servicios')+arrow()+flowNode(compact(tc.reached),'Personas alcanzadas')+'</div>'+
  '<div class="impact-grid"><div><div class="panel"><h3>¿A qué población estamos llegando?</h3><div class="help">Cambie la dimensión para explorar la composición del alcance acumulado.</div>'+
  segmentationPanel(ta.reached)+
  '</div><div class="panel" style="margin-top:16px"><h3>Poblaciones priorizadas</h3>'+priorityPanel()+'</div></div><div class="panel"><h3>Mapa territorial</h3><div style="display:flex;gap:8px;margin-bottom:10px"><select id="mapMetric" onchange="state.impact.metric=this.value;save(false);drawDaneMap()" style="max-width:220px"><option value="investment" '+(state.impact.metric==='investment'?'selected':'')+'>Inversión</option><option value="reached" '+(state.impact.metric==='reached'?'selected':'')+'>Personas alcanzadas</option><option value="services" '+(state.impact.metric==='services'?'selected':'')+'>Servicios</option></select><select id="mapLevel" onchange="state.impact.mapLevel=this.value;save(false);loadDaneMap()" style="max-width:180px"><option value="department" '+(state.impact.mapLevel==='department'?'selected':'')+'>Departamentos</option><option value="municipality" '+(state.impact.mapLevel==='municipality'?'selected':'')+'>Municipios</option></select></div><div class="mapbox"><svg id="coMap" viewBox="0 0 500 520" role="img" aria-label="Mapa de Colombia"></svg><div class="map-tip" id="mapTip"></div><div class="map-status" id="mapStatus">Cargando cartografía DANE…</div></div><div class="legend"><span>Menor</span><div class="grad"></div><span>Mayor</span></div><div class="source-line">Fuente cartográfica: DANE, DIVIPOLA MGN 2025.</div></div></div>'+
+ matrixView()+
  '<div class="panel" style="margin-top:16px"><h3>Detalle territorial</h3>'+territoryTable()+'</div>'+
  '<div class="panel" style="margin-top:16px"><h3>Lectura del año '+state.impact.year+'</h3><p>'+impactNarrative(tc,ta)+'</p><div class="note warn"><b>Interpretación:</b> inversión, compras y servicios pueden ser datos observados; “personas alcanzadas” depende del estado que marque cada registro. Esta vista no convierte cobertura en efecto causal sanitario.</div></div>';
 }
@@ -271,7 +318,7 @@ function arrow(){return '<div class="arrow">→</div>'}
 function territoryTable(){
  const rows=[...state.territories].sort((a,b)=>a.year-b.year||a.dptoCode.localeCompare(b.dptoCode));
  if(!rows.length)return '<div class="empty">Sin registros.</div>';
- return '<div class="table-wrap"><table class="impact-table"><thead><tr><th>Año</th><th>Territorio</th><th>Inversión</th><th>Compras</th><th>Servicios</th><th>Personas</th><th>Estado</th><th></th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+r.year+'</td><td><b>'+esc(r.department)+'</b>'+(r.municipality?'<br><small>'+esc(r.municipality)+' · '+r.dptoCode+r.mpioCode+'</small>':'<br><small>DP '+r.dptoCode+'</small>')+'</td><td>'+money(r.investment)+'</td><td>'+compact(r.purchases)+'</td><td>'+compact(r.services)+'</td><td>'+compact(r.reached)+'</td><td><span class="badge '+(r.status==='observed'?'obs':'est')+'">'+(r.status==='observed'?'Observado':'Estimado')+'</span></td><td><button class="btn" onclick="removeTerritory('+r.id+')" style="padding:5px 8px">×</button></td></tr>').join('')+'</tbody></table></div>';
+ return '<div class="table-wrap"><table class="impact-table"><thead><tr><th>Año</th><th>Territorio</th><th>Servicio</th><th>Inversión</th><th>Necesidad</th><th>Compras</th><th>Servicios</th><th>Personas</th><th>Cobertura</th><th>Estado</th><th></th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+r.year+'</td><td><b>'+esc(r.department)+'</b>'+(r.municipality?'<br><small>'+esc(r.municipality)+' · '+r.dptoCode+r.mpioCode+'</small>':'<br><small>DP '+r.dptoCode+'</small>')+'</td><td>'+esc(r.service||'General')+'</td><td>'+money(r.investment)+'</td><td>'+compact(r.need)+'</td><td>'+compact(r.purchases)+'</td><td>'+compact(r.services)+'</td><td>'+compact(r.reached)+'</td><td>'+(num(r.need)?((num(r.reached)/num(r.need))*100).toFixed(1)+'%':'—')+'</td><td><span class="badge '+(r.status==='observed'?'obs':'est')+'">'+(r.status==='observed'?'Observado':'Estimado')+'</span></td><td><button class="btn" onclick="removeTerritory('+r.id+')" style="padding:5px 8px">×</button></td></tr>').join('')+'</tbody></table></div>';
 }
 function impactNarrative(cur,acc){
  const share=acc.investment?cur.investment/acc.investment*100:0;
@@ -312,7 +359,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 function money(v){const n=parseFloat(v);return Number.isFinite(n)?new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n):'No definido'}
 function metrics(){const keys=[state.project.name,state.project.territory,state.project.question,state.resources.budget,state.resources.capacity,state.channels.digitalContacts,state.scenario.continuity,state.population.a1519,state.services.method,state.services.source];const done=keys.filter(v=>String(v||'').trim()).length;const p=Math.round(done/keys.length*100);document.getElementById('bar').style.width=p+'%';document.getElementById('pct').textContent=p+'%';document.getElementById('pend').textContent=keys.length-done;document.getElementById('stepNow').textContent=steps[current][0]}
 function save(show=true){localStorage.setItem('impacta-web',JSON.stringify(state));if(show)alert('Borrador guardado en este navegador.')}
-function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.2 - Enfoque poblacional diferencial',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
+function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.3 - Matriz de focalización',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
 function go(i){current=i;render()}
 nav();render();
 </script>
