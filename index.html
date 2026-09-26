@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IMPACTA | Registro guiado</title>
+<style>
+:root{--ink:#17324D;--teal:#087A7E;--honey:#E7B65A;--ivory:#F7F5F0;--slate:#52616F;--mint:#EAF5F4;--sand:#FFF5DF;--line:#DCE4E6;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Calibri,Segoe UI,Arial,sans-serif;background:var(--ivory);color:var(--ink);line-height:1.45}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+aside{background:#fff;border-right:1px solid var(--line);padding:28px 18px;position:sticky;top:0;height:100vh}.brand{font-size:29px;font-weight:800;letter-spacing:-1px}.tag{font-size:11px;color:var(--slate);margin:3px 0 28px}
+nav button{display:flex;width:100%;border:0;background:transparent;padding:12px 13px;margin:3px 0;border-radius:10px;color:var(--slate);text-align:left;gap:10px;align-items:center}.n{width:25px;height:25px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font-size:11px}.active{background:var(--mint)!important;color:var(--teal)!important;font-weight:700}
+main{padding:28px 38px 80px}.top{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}.top small{color:var(--slate)}
+.wrap{max-width:1100px;margin:25px auto}.hero{background:var(--ink);color:#fff;border-radius:18px;padding:36px;display:grid;grid-template-columns:1.2fr .8fr;gap:28px}.eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--honey);font-weight:700}.hero h1{font-size:40px;line-height:1.08;margin:10px 0 14px;letter-spacing:-1.2px}.hero p{color:#d6e1e9;max-width:570px}.pill{display:inline-block;background:var(--honey);color:var(--ink);border-radius:8px;padding:11px 16px;font-weight:700}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:25px;margin:18px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.full{grid-column:1/-1}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:7px}.help{font-size:11px;color:var(--slate);margin-top:6px}.req{color:var(--teal)}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid #cbd7db;border-radius:8px;background:#fff;color:var(--ink)}textarea{min-height:90px;resize:vertical}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:10px 15px;font-weight:700}.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}.btn.honey{background:var(--honey);border-color:var(--honey)}
+.note{background:var(--mint);border-left:4px solid var(--teal);padding:14px 16px;border-radius:8px;font-size:12px}.warn{background:var(--sand);border-left-color:#79550B}.progress{height:7px;background:#e7eeee;border-radius:9px;overflow:hidden}.progress i{display:block;height:100%;background:var(--teal)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}.stat b{font-size:26px;display:block}.stat span{font-size:11px;color:var(--slate)}
+.hidden{display:none}.review-row{display:flex;justify-content:space-between;gap:15px;border-bottom:1px solid #edf1f1;padding:11px 0;font-size:13px}.review-row span{color:var(--slate)}
+footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
+@media(max-width:850px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{display:flex;overflow:auto}nav button{min-width:155px}.hero{grid-template-columns:1fr}.grid,.stats{grid-template-columns:1fr}main{padding:20px}.hero h1{font-size:33px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+<div class="brand">IMPACTA</div><div class="tag">De la inversión al impacto</div>
+<nav id="nav"></nav>
+<div style="margin-top:24px" class="note">Borrador local: los datos quedan en este navegador. No registre información identificable de pacientes.</div>
+</aside>
+<main>
+<div class="top"><small>Registro guiado · Colombia</small><div><button class="btn" onclick="save()">Guardar</button> <button class="btn" onclick="downloadJSON()">Respaldar</button></div></div>
+<div class="wrap">
+<div class="progress"><i id="bar"></i></div>
+<section id="home">
+<div class="hero">
+<div><div class="eyebrow">IMPACTA Diagnóstico</div><h1>Datos, indicadores y costos para <span style="color:var(--honey)">una decisión concreta.</span></h1><p>Registre la información paso a paso con ayudas contextuales, controles básicos y una revisión final antes de exportar.</p><button class="btn honey" onclick="go(1)">Comenzar registro</button></div>
+<div><div class="note" style="background:#ffffff12;color:#fff;border-color:var(--honey)">1 programa · 1 territorio · 1 pregunta<br><br>Oferta inicial: diagnóstico reproducible. Los escenarios prospectivos permanecen en validación.</div></div>
+</div>
+<div class="stats" style="margin-top:18px"><div class="stat"><b id="pct">0%</b><span>completado</span></div><div class="stat"><b id="pend">0</b><span>campos clave pendientes</span></div><div class="stat"><b id="stepNow">Inicio</b><span>etapa actual</span></div></div>
+</section>
+<section id="s1" class="hidden"></section><section id="s2" class="hidden"></section><section id="s3" class="hidden"></section><section id="s4" class="hidden"></section><section id="s5" class="hidden"></section><section id="s6" class="hidden"></section><section id="s7" class="hidden"></section>
+</div>
+<footer>IMPACTA · Claridad humana · Prototipo de captura agregada. El diseño no sustituye revisión metodológica, clínica o jurídica.</footer>
+</main>
+</div>
+<script>
+const steps=[
+['Inicio','Panorama del registro'],['Tu proyecto','Alcance y pregunta'],['Recursos','Presupuesto y capacidad'],['Canales','Captación y referencias'],['Escenarios','Supuestos del modelo'],['Población','Grupos etarios'],['Servicios','Información agregada'],['Revisar','Validar y exportar']
+];
+const defaults={project:{name:'',org:'',territory:'',question:'',start:2027,end:2031},resources:{budget:'',fixed:'',capacity:'',serviceCost:'',followup:'',retention:''},channels:{digitalContacts:'',digitalConv:'',institutionalContacts:'',institutionalConv:'',communityContacts:'',communityConv:''},scenario:{additionality:'',continuity:'',healthCoeff:'',discount:''},population:{a1014:'',a1519:'',a2024:'',a2534:'',a3549:''},services:{method:'',quantity:'',unit:'',source:''}};
+let state=JSON.parse(localStorage.getItem('impacta-web')||'null')||defaults; let current=0;
+function nav(){document.getElementById('nav').innerHTML=steps.map((s,i)=>'<button class="'+(i===current?'active':'')+'" onclick="go('+i+')"><span class="n">'+i+'</span><span><b>'+s[0]+'</b><br><small>'+s[1]+'</small></span></button>').join('')}
+function field(group,key,label,help,type='text',extra=''){const v=(state[group]&&state[group][key])??'';return '<div '+(extra==='full'?'class="full"':'')+'><label>'+label+'</label><input type="'+type+'" value="'+v+'" oninput="setv(\''+group+'\',\''+key+'\',this.value)" aria-label="'+label.replace(/<[^>]+>/g,'')+'"><div class="help">'+help+'</div></div>'}
+function setv(g,k,v){state[g][k]=v;save(false);metrics()}
+function card(title,body,note=''){return '<div class="card"><h2>'+title+'</h2>'+(note?'<p class="note">'+note+'</p>':'')+'<div class="grid">'+body+'</div></div>'}
+function buttons(prev,next){return '<div class="actions"><button class="btn" onclick="go('+prev+')">← Anterior</button><button class="btn primary" onclick="go('+next+')">Continuar →</button></div>'}
+function render(){
+document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'));
+const id=current===0?'home':'s'+current;document.getElementById(id).classList.remove('hidden');
+if(current===1)document.getElementById(id).innerHTML=card('1. Tu proyecto',
+ field('project','name','Nombre del proyecto <span class="req">*</span>','Use un nombre reconocible para el programa.')+
+ field('project','org','Organización','Entidad, red, ONG o equipo responsable.')+
+ field('project','territory','Territorio <span class="req">*</span>','Departamento, municipio o ámbito acordado.')+
+ field('project','question','Pregunta de decisión <span class="req">*</span>','Ej.: ¿en qué parte del recorrido referencia → cita → atención se pierde seguimiento?','text','full')+
+ field('project','start','Año inicial','Inicio del horizonte.','number')+
+ field('project','end','Año final','Fin del horizonte.','number')
+ ,'Un programa, un territorio y una pregunta. No amplíe el alcance antes de comprobar datos y capacidad.')+buttons(0,2);
+if(current===2)document.getElementById(id).innerHTML=card('2. Recursos',
+ field('resources','budget','Presupuesto anual (COP)','Techo disponible para el alcance analizado.','number')+
+ field('resources','fixed','Costos fijos (COP)','Coordinación, plataforma u operación fija.','number')+
+ field('resources','capacity','Capacidad anual','Máximo de nuevos inicios o servicios según la unidad acordada.','number')+
+ field('resources','serviceCost','Costo unitario (COP)','Costo por nuevo inicio o unidad de servicio.','number')+
+ field('resources','followup','Seguimiento anual (COP)','Costo promedio de seguimiento por persona activa.','number')+
+ field('resources','retention','Continuidad anual (%)','Supuesto a validar; no confundir con eficacia clínica.','number')
+ ,'Registre costos del mismo alcance y período. Si un rubro falta, identifíquelo; no lo convierta en cero.')+buttons(1,3);
+if(current===3)document.getElementById(id).innerHTML=card('3. Canales',
+ field('channels','digitalContacts','Contactos digitales','Personas/contactos según definición documentada.','number')+
+ field('channels','digitalConv','Conversión digital (%)','Porcentaje que llega al evento definido.','number')+
+ field('channels','institutionalContacts','Contactos institucionales','Referencias u oportunidades originadas en instituciones.','number')+
+ field('channels','institutionalConv','Conversión institucional (%)','Usar denominadores compatibles.','number')+
+ field('channels','communityContacts','Contactos comunitarios','Alcance comunitario según definición.','number')+
+ field('channels','communityConv','Conversión comunitaria (%)','No sumar canales como personas únicas sin deduplicación.','number')
+ ,'Contacto, referencia, cita y atención son etapas diferentes. La repetición entre canales debe medirse por separado.')+buttons(2,4);
+if(current===4)document.getElementById(id).innerHTML=card('4. Escenario de trabajo',
+ field('scenario','additionality','Adicionalidad (%)','Fracción incremental frente al comparador. Requiere evidencia para uso prospectivo.','number')+
+ field('scenario','continuity','Continuidad anual (%)','Supuesto o dato observado; documente fuente.','number')+
+ field('scenario','healthCoeff','Coeficiente sanitario','Solo demostrativo mientras no esté calibrado para Colombia.','number')+
+ field('scenario','discount','Descuento (%)','Elección analítica; conserve también resultados no descontados.','number')
+ ,'Estos campos permiten explorar escenarios; no convierten una simulación en impacto causal demostrado.')+buttons(3,5);
+if(current===5)document.getElementById(id).innerHTML=card('5. Población por grupos etarios',
+ field('population','a1014','10–14 (%)','Ruta diferenciada de protección y atención.','number')+
+ field('population','a1519','15–19 (%)','Mantenga el universo y denominador de cada fuente.','number')+
+ field('population','a2024','20–24 (%)','Participación dentro del universo analizado.','number')+
+ field('population','a2534','25–34 (%)','Participación dentro del universo analizado.','number')+
+ field('population','a3549','35–49 (%)','Participación dentro del universo analizado.','number')
+ ,'La suma debería corresponder al universo definido. Datos faltantes se reportan como no disponibles, no como cero.')+buttons(4,6);
+if(current===6)document.getElementById(id).innerHTML=card('6. Servicios agregados',
+ field('services','method','Método o servicio','Ej.: anticoncepción oral, implante, consulta, educación.')+
+ field('services','quantity','Cantidad','Unidad agregada del período.','number')+
+ field('services','unit','Unidad','Servicios, productos, personas únicas, etc.')+
+ field('services','source','Fuente / versión','Archivo, sistema, fecha o referencia que respalda el dato.','text','full')
+ ,'No incluya nombres, documentos, teléfonos ni historias clínicas. Esta versión es para información agregada.')+buttons(5,7);
+if(current===7)document.getElementById(id).innerHTML=review();
+nav();metrics();window.scrollTo({top:0,behavior:'smooth'});
+}
+function review(){
+const missing=[];[['project','name','Nombre del proyecto'],['project','territory','Territorio'],['project','question','Pregunta de decisión'],['resources','budget','Presupuesto']].forEach(x=>{if(!state[x[0]][x[1]])missing.push(x[2])});
+const age=['a1014','a1519','a2024','a2534','a3549'].reduce((a,k)=>a+(parseFloat(state.population[k])||0),0);
+return '<div class="card"><div class="eyebrow" style="color:var(--teal)">Revisión final</div><h2>Antes de exportar</h2>'+
+(missing.length?'<div class="note warn"><b>Pendientes:</b> '+missing.join(', ')+'</div>':'<div class="note"><b>Campos clave completos.</b> Revise fuentes y supuestos antes de compartir.</div>')+
+'<div class="review-row"><b>Proyecto</b><span>'+esc(state.project.name||'No definido')+'</span></div>'+
+'<div class="review-row"><b>Territorio</b><span>'+esc(state.project.territory||'No definido')+'</span></div>'+
+'<div class="review-row"><b>Pregunta</b><span>'+esc(state.project.question||'No definida')+'</span></div>'+
+'<div class="review-row"><b>Presupuesto</b><span>'+money(state.resources.budget)+'</span></div>'+
+'<div class="review-row"><b>Distribución etaria</b><span>'+age.toFixed(1)+'% '+(Math.abs(age-100)<.1?'✓':'(revisar)')+'</span></div>'+
+'<div class="actions"><button class="btn" onclick="go(6)">← Editar</button><div><button class="btn" onclick="downloadJSON()">Exportar JSON</button> <button class="btn primary" onclick="window.print()">Imprimir / PDF</button></div></div></div>'+
+'<div class="card"><h2>Siguiente fase</h2><p>La exportación directa al libro Excel completo se mantiene en la versión avanzada. Este MVP web valida captura guiada, ayudas, consistencia y estructura del registro.</p></div>'
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function money(v){const n=parseFloat(v);return Number.isFinite(n)?new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n):'No definido'}
+function metrics(){const keys=[state.project.name,state.project.territory,state.project.question,state.resources.budget,state.resources.capacity,state.channels.digitalContacts,state.scenario.continuity,state.population.a1519,state.services.method,state.services.source];const done=keys.filter(v=>String(v||'').trim()).length;const p=Math.round(done/keys.length*100);document.getElementById('bar').style.width=p+'%';document.getElementById('pct').textContent=p+'%';document.getElementById('pend').textContent=keys.length-done;document.getElementById('stepNow').textContent=steps[current][0]}
+function save(show=true){localStorage.setItem('impacta-web',JSON.stringify(state));if(show)alert('Borrador guardado en este navegador.')}
+function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.0',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
+function go(i){current=i;render()}
+nav();render();
+</script>
+</body></html>
