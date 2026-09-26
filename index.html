@@ -36,6 +36,7 @@ footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
 .matrix-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:start}.matrix-chart{position:relative;height:430px;background:linear-gradient(180deg,#fbfdfd,#f5f9f9);border:1px solid var(--line);border-radius:14px;overflow:hidden}
 .matrix-chart svg{width:100%;height:100%;display:block}.matrix-tip{position:absolute;display:none;pointer-events:none;background:var(--ink);color:#fff;padding:9px 10px;border-radius:8px;font-size:10px;z-index:5;max-width:230px}
 .quad-list{display:grid;gap:9px}.quad{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}.quad b{display:block;font-size:12px}.quad small{color:var(--slate)}.quad-risk{border-left:4px solid #C46A3B}.quad-opportunity{border-left:4px solid var(--honey)}.quad-efficient{border-left:4px solid var(--teal)}.quad-watch{border-left:4px solid #8395A7}
+.demo-banner{background:linear-gradient(135deg,#17324D,#087A7E);color:#fff;border-radius:14px;padding:16px 18px;margin:16px 0;display:flex;justify-content:space-between;gap:16px;align-items:center}.demo-banner b{display:block}.demo-banner small{color:#d9eeee}.demo-banner .btn{white-space:nowrap}
 .matrix-table td:nth-child(n+3){text-align:right}.matrix-tag{display:inline-block;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:700}.tag-risk{background:#FBEAE1;color:#8B4524}.tag-opportunity{background:#FFF4D6;color:#76520A}.tag-efficient{background:#E5F4EF;color:#176146}.tag-watch{background:#EDF1F4;color:#52616F}
 @media(max-width:850px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{display:flex;overflow:auto}nav button{min-width:155px}.hero{grid-template-columns:1fr}.grid,.stats,.kpis,.impact-grid{grid-template-columns:1fr}main{padding:20px}.hero h1{font-size:33px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.territory-form{grid-template-columns:1fr 1fr}.territory-form .wide{grid-column:span 2}.mapbox,.mapbox svg{height:360px;min-height:360px}.segment-grid{grid-template-columns:1fr}.segbar{grid-template-columns:86px 1fr 68px}.matrix-controls,.matrix-wrap{grid-template-columns:1fr}.matrix-chart{height:380px}}
 </style>
@@ -53,7 +54,7 @@ footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
 <div class="progress"><i id="bar"></i></div>
 <section id="home">
 <div class="hero">
-<div><div class="eyebrow">IMPACTA Diagnóstico</div><h1>Datos, indicadores y costos para <span style="color:var(--honey)">una decisión concreta.</span></h1><p>Registre la información paso a paso con ayudas contextuales, controles básicos y una revisión final antes de exportar.</p><button class="btn honey" onclick="go(1)">Comenzar registro</button></div>
+<div><div class="eyebrow">IMPACTA Diagnóstico</div><h1>Datos, indicadores y costos para <span style="color:var(--honey)">una decisión concreta.</span></h1><p>Registre la información paso a paso con ayudas contextuales, controles básicos y una revisión final antes de exportar.</p><button class="btn honey" onclick="go(1)">Comenzar registro</button> <button class="btn" style="margin-left:8px;background:#fff;color:var(--ink)" onclick="loadDemo()">Explorar escenario demo</button></div>
 <div><div class="note" style="background:#ffffff12;color:#fff;border-color:var(--honey)">1 programa · 1 territorio · 1 pregunta<br><br>Oferta inicial: diagnóstico reproducible. Los escenarios prospectivos permanecen en validación.</div></div>
 </div>
 <div class="stats" style="margin-top:18px"><div class="stat"><b id="pct">0%</b><span>completado</span></div><div class="stat"><b id="pend">0</b><span>campos clave pendientes</span></div><div class="stat"><b id="stepNow">Inicio</b><span>etapa actual</span></div></div>
@@ -77,6 +78,7 @@ if(!state.impact.segment) state.impact.segment='age';
 if(!state.impact.matrixService) state.impact.matrixService='all';
 if(!state.impact.matrixTerritory) state.impact.matrixTerritory='all';
 if(!state.impact.matrixPopulation) state.impact.matrixPopulation='all';
+if(state.demoMode===undefined) state.demoMode=false;
 let current=0; let daneGeo=null; let daneLevel='department';
 function nav(){document.getElementById('nav').innerHTML=steps.map((s,i)=>'<button class="'+(i===current?'active':'')+'" onclick="go('+i+')"><span class="n">'+i+'</span><span><b>'+s[0]+'</b><br><small>'+s[1]+'</small></span></button>').join('')}
 function field(group,key,label,help,type='text',extra=''){const v=(state[group]&&state[group][key])??'';return '<div '+(extra==='full'?'class="full"':'')+'><label>'+label+'</label><input type="'+type+'" value="'+v+'" oninput="setv(\''+group+'\',\''+key+'\',this.value)" aria-label="'+label.replace(/<[^>]+>/g,'')+'"><div class="help">'+help+'</div></div>'}
@@ -187,10 +189,58 @@ return '<div class="card"><div class="eyebrow" style="color:var(--teal)">Revisi�
 function num(v){const n=parseFloat(String(v??'').replace(',','.'));return Number.isFinite(n)?n:0}
 function compact(v){return new Intl.NumberFormat('es-CO',{notation:'compact',maximumFractionDigits:1}).format(num(v))}
 function pct1(v){return (num(v)||0).toLocaleString('es-CO',{maximumFractionDigits:1})+'%'}
+
+function loadDemo(){
+ if(state.territories?.length&&!state.demoMode&&!confirm('Esto reemplazará los registros territoriales actuales por un escenario demostrativo sintético. ¿Continuar?'))return;
+ state=structuredClone(defaults);
+ state.demoMode=true;
+ state.project={name:'Demo IMPACTA Colombia 2027–2031',org:'Escenario demostrativo',territory:'5 municipios de Colombia',question:'¿Cómo cambia la focalización de la inversión según necesidad, cobertura, territorio y servicio?',start:2027,end:2031};
+ state.population={...state.population,a1014:8,a1519:22,a2024:24,a2534:30,a3549:16,sexWomen:52,sexMen:47,sexOther:1,ethIndigenous:3,ethRom:.1,ethRaizal:.3,ethPalenquero:.1,ethAfro:18,ethNone:76,ethNoInfo:2.5,areaUrban:78,areaCenter:7,areaRural:15};
+ state.priority={...state.priority,adolescents:8600,migrants:4200,disability:1800,victims:5100,ruralPriority:6900,pregnant:1250};
+ state.resources={budget:2400000000,fixed:320000000,capacity:18000,serviceCost:92000,followup:48000,retention:74};
+ state.channels={digitalContacts:22000,digitalConv:18,institutionalContacts:14000,institutionalConv:31,communityContacts:18000,communityConv:24};
+ state.scenario={additionality:55,continuity:74,healthCoeff:'',discount:3};
+ state.services={method:'Tres líneas demostrativas',quantity:0,unit:'servicios',source:'Datos sintéticos generados por IMPACTA para demostración'};
+ const places=[
+  {dptoCode:'11',department:'Bogotá D.C.',mpioCode:'001',municipality:'Bogotá D.C.',factor:1.55,need:1.65},
+  {dptoCode:'25',department:'Cundinamarca',mpioCode:'754',municipality:'Soacha',factor:.88,need:1.32},
+  {dptoCode:'05',department:'Antioquia',mpioCode:'001',municipality:'Medellín',factor:1.20,need:1.10},
+  {dptoCode:'76',department:'Valle del Cauca',mpioCode:'001',municipality:'Cali',factor:1.08,need:1.18},
+  {dptoCode:'08',department:'Atlántico',mpioCode:'001',municipality:'Barranquilla',factor:.94,need:1.05}
+ ];
+ const services=[
+  {service:'Anticoncepción y consejería',baseInv:105000000,baseNeed:3900,reach:.48,buy:2300,srv:1750},
+  {service:'Educación integral en sexualidad',baseInv:72000000,baseNeed:5200,reach:.36,buy:3100,srv:2400},
+  {service:'Seguimiento y navegación',baseInv:58000000,baseNeed:2800,reach:.31,buy:1250,srv:1100}
+ ];
+ const rows=[];
+ for(let year=2027;year<=2031;year++){
+   const t=year-2027;
+   places.forEach((p,pi)=>services.forEach((s,si)=>{
+     const invGrowth=1+t*.10+(pi%2)*.025;
+     const needGrowth=1+t*.025;
+     const reachGrowth=Math.min(.90,s.reach+t*.055+(pi===1?-.045:pi===2?.035:0));
+     const need=Math.round(s.baseNeed*p.need*needGrowth);
+     const reached=Math.round(need*reachGrowth);
+     rows.push({id:year*10000+pi*100+si,year,...p,service:s.service,need,
+       investment:Math.round(s.baseInv*p.factor*invGrowth),
+       purchases:Math.round(s.buy*p.factor*(1+t*.08)),
+       services:Math.round(s.srv*p.factor*(1+t*.09)),
+       reached,status:t<2?'observed':'estimated'});
+   }));
+ }
+ state.territories=rows;
+ state.impact={year:2027,metric:'investment',mapLevel:'municipality',segment:'age',matrixService:'all',matrixTerritory:'all',matrixPopulation:'all'};
+ save(false);current=8;render();
+}
+function clearDemo(){
+ localStorage.removeItem('impacta-web');state=structuredClone(defaults);state.territories=[];state.demoMode=false;current=0;save(false);render();
+}
+
 function ensureYears(){const a=Math.round(num(state.project.start)||2027),b=Math.round(num(state.project.end)||a+4);if(!state.impact.year||state.impact.year<a||state.impact.year>b)state.impact.year=a;return [a,b]}
 function impactView(){
  const [a,b]=ensureYears();
- return '<div class="impact-head"><div><div class="eyebrow" style="color:var(--teal)">Explorador progresivo</div><h2>De la inversión a la población</h2><div class="help">Observe cómo recursos, compras/servicios y cobertura evolucionan en el tiempo. “Impacto” solo se usa como resultado modelado cuando existe soporte suficiente.</div></div>'+
+ return (state.demoMode?'<div class="demo-banner"><div><b>Escenario demostrativo sintético activo</b><small>Municipios y códigos DIVIPOLA reales; inversiones, necesidades, servicios y resultados son ficticios.</small></div><button class="btn" onclick="clearDemo()">Salir del demo</button></div>':'')+'<div class="impact-head"><div><div class="eyebrow" style="color:var(--teal)">Explorador progresivo</div><h2>De la inversión a la población</h2><div class="help">Observe cómo recursos, compras/servicios y cobertura evolucionan en el tiempo. “Impacto” solo se usa como resultado modelado cuando existe soporte suficiente.</div></div>'+
  '<div class="yearbox"><label>Año de análisis: <b id="yearLabel">'+state.impact.year+'</b></label><input id="yearSlider" type="range" min="'+a+'" max="'+b+'" step="1" value="'+state.impact.year+'" oninput="state.impact.year=this.value;document.getElementById(\'yearLabel\').textContent=this.value;save(false);renderImpact();loadDaneMap()"><div class="help">'+a+' — '+b+'</div></div></div>'+
  territoryEditor()+
  '<div id="impactDash"><div class="empty">Agregue al menos un registro territorial para activar la visualización.</div></div>'+
@@ -210,7 +260,7 @@ function territoryEditor(){
  '<div><label>Personas alcanzadas</label><input id="trReach" type="number" min="0" placeholder="1250"></div>'+
  '<div><label>Tipo de dato</label><select id="trStatus"><option value="observed">Observado</option><option value="estimated">Estimado</option></select></div>'+
  '<div class="mini-actions"><button class="btn primary" onclick="addTerritory()">+ Agregar registro</button></div></div>'+
- '<div class="source-line">Cartografía: DIVIPOLA / Marco Geoestadístico Nacional 2025, DANE. Los datos de inversión, compras, servicios y personas provienen de los registros que usted diligencie.</div></div>';
+ '<div class="source-line">Cartografía: DIVIPOLA / Marco Geoestadístico Nacional 2025, DANE. En el escenario demo, solo territorios/códigos son reales; los demás valores son sintéticos.</div></div>';
 }
 function addTerritory(){
  const y=Math.round(num(document.getElementById('trYear').value));
@@ -359,7 +409,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 function money(v){const n=parseFloat(v);return Number.isFinite(n)?new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n):'No definido'}
 function metrics(){const keys=[state.project.name,state.project.territory,state.project.question,state.resources.budget,state.resources.capacity,state.channels.digitalContacts,state.scenario.continuity,state.population.a1519,state.services.method,state.services.source];const done=keys.filter(v=>String(v||'').trim()).length;const p=Math.round(done/keys.length*100);document.getElementById('bar').style.width=p+'%';document.getElementById('pct').textContent=p+'%';document.getElementById('pend').textContent=keys.length-done;document.getElementById('stepNow').textContent=steps[current][0]}
 function save(show=true){localStorage.setItem('impacta-web',JSON.stringify(state));if(show)alert('Borrador guardado en este navegador.')}
-function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.3 - Matriz de focalización',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
+function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.4 - Demo Colombia interactivo',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
 function go(i){current=i;render()}
 nav();render();
 </script>
