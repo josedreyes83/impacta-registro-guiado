@@ -28,7 +28,11 @@ footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}.impact-table{width:100%;border-collapse:collapse;font-size:11px;min-width:920px}.impact-table th{background:var(--ink);color:#fff;text-align:left;padding:9px}.impact-table td{padding:8px 9px;border-bottom:1px solid #edf1f1;vertical-align:middle}.impact-table tbody tr:hover{background:#f7fbfb}.badge{display:inline-block;padding:3px 7px;border-radius:99px;font-size:9px;font-weight:700}.obs{background:#e5f4ef;color:#176146}.est{background:var(--sand);color:#79550B}
 .territory-form{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.territory-form .wide{grid-column:span 2}.territory-form label{font-size:10px}.territory-form input,.territory-form select{padding:9px;font-size:11px}.mini-actions{display:flex;gap:8px;align-items:end}
 .empty{padding:28px;text-align:center;color:var(--slate);font-size:12px}.source-line{font-size:9px;color:var(--slate);margin-top:8px}
-@media(max-width:850px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{display:flex;overflow:auto}nav button{min-width:155px}.hero{grid-template-columns:1fr}.grid,.stats,.kpis,.impact-grid{grid-template-columns:1fr}main{padding:20px}.hero h1{font-size:33px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.territory-form{grid-template-columns:1fr 1fr}.territory-form .wide{grid-column:span 2}.mapbox,.mapbox svg{height:360px;min-height:360px}}
+.seg-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.seg-tabs button{border:1px solid var(--line);background:#fff;color:var(--slate);border-radius:999px;padding:7px 11px;font-size:10px;font-weight:700}.seg-tabs button.active-seg{background:var(--ink);color:#fff;border-color:var(--ink)}
+.segment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.segment-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}.segment-card h4{margin:0 0 8px;font-size:12px}.segment-total{font-size:10px;color:var(--slate);margin-top:8px}.segbar{display:grid;grid-template-columns:minmax(86px,1fr) 2fr 72px;gap:8px;align-items:center;margin:8px 0;font-size:10px}.segbar .track{height:9px}
+.priority-wrap{display:flex;gap:7px;flex-wrap:wrap}.priority-chip{background:#f3f7f7;border:1px solid #dbe7e7;border-radius:999px;padding:7px 10px;font-size:10px}.priority-chip b{color:var(--teal)}
+.dim-note{font-size:10px;color:var(--slate);padding:10px 12px;background:#f8fbfb;border-radius:8px;border:1px solid #e4eeee}
+@media(max-width:850px){.app{display:block}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}nav{display:flex;overflow:auto}nav button{min-width:155px}.hero{grid-template-columns:1fr}.grid,.stats,.kpis,.impact-grid{grid-template-columns:1fr}main{padding:20px}.hero h1{font-size:33px}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.territory-form{grid-template-columns:1fr 1fr}.territory-form .wide{grid-column:span 2}.mapbox,.mapbox svg{height:360px;min-height:360px}.segment-grid{grid-template-columns:1fr}.segbar{grid-template-columns:86px 1fr 68px}}
 </style>
 </head>
 <body>
@@ -58,10 +62,13 @@ footer{max-width:1100px;margin:25px auto;color:var(--slate);font-size:10px}
 const steps=[
 ['Inicio','Panorama del registro'],['Tu proyecto','Alcance y pregunta'],['Recursos','Presupuesto y capacidad'],['Canales','Captación y referencias'],['Escenarios','Supuestos del modelo'],['Población','Grupos etarios'],['Servicios','Información agregada'],['Revisar','Validar y exportar'],['Impacto','Inversión → población']
 ];
-const defaults={project:{name:'',org:'',territory:'',question:'',start:2027,end:2031},resources:{budget:'',fixed:'',capacity:'',serviceCost:'',followup:'',retention:''},channels:{digitalContacts:'',digitalConv:'',institutionalContacts:'',institutionalConv:'',communityContacts:'',communityConv:''},scenario:{additionality:'',continuity:'',healthCoeff:'',discount:''},population:{a1014:'',a1519:'',a2024:'',a2534:'',a3549:''},services:{method:'',quantity:'',unit:'',source:''},territories:[],impact:{year:'',metric:'investment',mapLevel:'department'}};
+const defaults={project:{name:'',org:'',territory:'',question:'',start:2027,end:2031},resources:{budget:'',fixed:'',capacity:'',serviceCost:'',followup:'',retention:''},channels:{digitalContacts:'',digitalConv:'',institutionalContacts:'',institutionalConv:'',communityContacts:'',communityConv:''},scenario:{additionality:'',continuity:'',healthCoeff:'',discount:''},population:{a1014:'',a1519:'',a2024:'',a2534:'',a3549:'',sexWomen:'',sexMen:'',sexOther:'',genderWomen:'',genderMen:'',genderNonBinary:'',genderOther:'',genderNoInfo:'',ethIndigenous:'',ethRom:'',ethRaizal:'',ethPalenquero:'',ethAfro:'',ethNone:'',ethNoInfo:'',areaUrban:'',areaCenter:'',areaRural:''},priority:{adolescents:'',migrants:'',disability:'',victims:'',ruralPriority:'',pregnant:'',otherLabel:'',otherValue:''},services:{method:'',quantity:'',unit:'',source:''},territories:[],impact:{year:'',metric:'investment',mapLevel:'department'}};
 let state=JSON.parse(localStorage.getItem('impacta-web')||'null')||structuredClone(defaults); 
 if(!state.territories) state.territories=[];
-if(!state.impact) state.impact={year:'',metric:'investment',mapLevel:'department'};
+if(!state.priority) state.priority={adolescents:'',migrants:'',disability:'',victims:'',ruralPriority:'',pregnant:'',otherLabel:'',otherValue:''};
+Object.keys(defaults.population).forEach(k=>{if(state.population[k]===undefined)state.population[k]=''});
+if(!state.impact) state.impact={year:'',metric:'investment',mapLevel:'department',segment:'age'};
+if(!state.impact.segment) state.impact.segment='age';
 let current=0; let daneGeo=null; let daneLevel='department';
 function nav(){document.getElementById('nav').innerHTML=steps.map((s,i)=>'<button class="'+(i===current?'active':'')+'" onclick="go('+i+')"><span class="n">'+i+'</span><span><b>'+s[0]+'</b><br><small>'+s[1]+'</small></span></button>').join('')}
 function field(group,key,label,help,type='text',extra=''){const v=(state[group]&&state[group][key])??'';return '<div '+(extra==='full'?'class="full"':'')+'><label>'+label+'</label><input type="'+type+'" value="'+v+'" oninput="setv(\''+group+'\',\''+key+'\',this.value)" aria-label="'+label.replace(/<[^>]+>/g,'')+'"><div class="help">'+help+'</div></div>'}
@@ -101,13 +108,50 @@ if(current===4)document.getElementById(id).innerHTML=card('4. Escenario de traba
  field('scenario','healthCoeff','Coeficiente sanitario','Solo demostrativo mientras no esté calibrado para Colombia.','number')+
  field('scenario','discount','Descuento (%)','Elección analítica; conserve también resultados no descontados.','number')
  ,'Estos campos permiten explorar escenarios; no convierten una simulación en impacto causal demostrado.')+buttons(3,5);
-if(current===5)document.getElementById(id).innerHTML=card('5. Población por grupos etarios',
+if(current===5)document.getElementById(id).innerHTML=
+ card('5A. Población por grupos etarios',
  field('population','a1014','10–14 (%)','Ruta diferenciada de protección y atención.','number')+
  field('population','a1519','15–19 (%)','Mantenga el universo y denominador de cada fuente.','number')+
  field('population','a2024','20–24 (%)','Participación dentro del universo analizado.','number')+
  field('population','a2534','25–34 (%)','Participación dentro del universo analizado.','number')+
  field('population','a3549','35–49 (%)','Participación dentro del universo analizado.','number')
- ,'La suma debería corresponder al universo definido. Datos faltantes se reportan como no disponibles, no como cero.')+buttons(4,6);
+ ,'La suma debería corresponder al universo definido. Datos faltantes se reportan como no disponibles, no como cero.')+
+ card('5B. Sexo reportado por la fuente',
+ field('population','sexWomen','Mujeres (%)','Use la categoría tal como venga definida en la fuente.','number')+
+ field('population','sexMen','Hombres (%)','Use la categoría tal como venga definida en la fuente.','number')+
+ field('population','sexOther','Otra / no disponible (%)','Úselo solo si la fuente incluye una categoría adicional o no clasificable.','number')
+ ,'No mezcle “sexo” con identidad de género. Mantenga las categorías originales de la fuente.')+
+ card('5C. Identidad de género (opcional)',
+ field('population','genderWomen','Mujer (%)','Solo si la fuente mide identidad de género de forma explícita.','number')+
+ field('population','genderMen','Hombre (%)','Solo si la fuente mide identidad de género de forma explícita.','number')+
+ field('population','genderNonBinary','No binaria (%)','Solo si existe en la fuente.','number')+
+ field('population','genderOther','Otra identidad (%)','Solo si existe en la fuente.','number')+
+ field('population','genderNoInfo','No informa (%)','Mantenga esta categoría si está presente.','number')
+ ,'Esta sección es opcional. Si su fuente no mide identidad de género, déjela vacía; no infiera valores.')+
+ card('5D. Pertenencia étnico-racial',
+ field('population','ethIndigenous','Indígena (%)','Autorreconocimiento étnico según la fuente.','number')+
+ field('population','ethRom','Gitano(a) o Rrom (%)','Categoría utilizada por el CNPV 2018.','number')+
+ field('population','ethRaizal','Raizal (%)','Archipiélago de San Andrés, Providencia y Santa Catalina.','number')+
+ field('population','ethPalenquero','Palenquero(a) de San Basilio (%)','Categoría del CNPV 2018.','number')+
+ field('population','ethAfro','Negro(a), mulato(a), afrodescendiente o afrocolombiano(a) (%)','Mantenga la agrupación de la fuente cuando corresponda.','number')+
+ field('population','ethNone','Ningún grupo étnico (%)','Categoría reportada por el CNPV 2018.','number')+
+ field('population','ethNoInfo','Sin información / no informa (%)','No convierta faltantes en cero.','number')
+ ,'Categorías alineadas con el CNPV 2018 del DANE. Úselas solo cuando la fuente tenga esa desagregación.')+
+ card('5E. Área geográfica',
+ field('population','areaUrban','Cabecera municipal (%)','Clase 1 del DANE.','number')+
+ field('population','areaCenter','Centro poblado (%)','Clase 2 del DANE.','number')+
+ field('population','areaRural','Rural disperso (%)','Clase 3 del DANE.','number')
+ ,'DANE distingue cabecera, centro poblado y rural disperso para fines estadísticos.')+
+ card('5F. Poblaciones priorizadas',
+ field('priority','adolescents','Adolescentes / jóvenes priorizados','Cantidad agregada; puede solaparse con otros grupos.','number')+
+ field('priority','migrants','Personas migrantes','Cantidad agregada; no debe sumarse automáticamente con otras etiquetas.','number')+
+ field('priority','disability','Personas con discapacidad','Cantidad agregada según la fuente.','number')+
+ field('priority','victims','Víctimas del conflicto','Cantidad agregada según la fuente.','number')+
+ field('priority','ruralPriority','Población rural priorizada','Cantidad agregada; diferente a la distribución geográfica general.','number')+
+ field('priority','pregnant','Gestantes priorizadas','Cantidad agregada cuando aplique.','number')+
+ field('priority','otherLabel','Otra población priorizada','Nombre de la categoría adicional.','text')+
+ field('priority','otherValue','Cantidad otra población','Cantidad agregada.','number')
+ ,'Las poblaciones priorizadas pueden superponerse. Por eso se muestran como etiquetas independientes y no deben sumarse como si fueran personas únicas.')+buttons(4,6);
 if(current===6)document.getElementById(id).innerHTML=card('6. Servicios agregados',
  field('services','method','Método o servicio','Ej.: anticoncepción oral, implante, consulta, educación.')+
  field('services','quantity','Cantidad','Unidad agregada del período.','number')+
@@ -176,13 +220,38 @@ function ageDistribution(reached){
  const shares=[['10–14',num(state.population.a1014)],['15–19',num(state.population.a1519)],['20–24',num(state.population.a2024)],['25–34',num(state.population.a2534)],['35–49',num(state.population.a3549)]];
  const sum=shares.reduce((a,x)=>a+x[1],0);return shares.map(x=>({label:x[0],pct:sum?x[1]/sum*100:0,n:sum?reached*x[1]/sum:0}));
 }
+
+function normalizeSegments(items){
+ const vals=items.map(x=>[x[0],num(x[1])]).filter(x=>x[1]>0),sum=vals.reduce((a,x)=>a+x[1],0);
+ return vals.map(x=>({label:x[0],value:x[1],pct:sum?x[1]/sum*100:0}));
+}
+function segmentData(kind,reached){
+ let items=[],note='';
+ if(kind==='age'){items=[['10–14',state.population.a1014],['15–19',state.population.a1519],['20–24',state.population.a2024],['25–34',state.population.a2534],['35–49',state.population.a3549]];note='Distribución proporcional por edad.'}
+ if(kind==='sex'){items=[['Mujeres',state.population.sexWomen],['Hombres',state.population.sexMen],['Otra/no disp.',state.population.sexOther]];note='Sexo según categorías reportadas por la fuente.'}
+ if(kind==='gender'){items=[['Mujer',state.population.genderWomen],['Hombre',state.population.genderMen],['No binaria',state.population.genderNonBinary],['Otra identidad',state.population.genderOther],['No informa',state.population.genderNoInfo]];note='Identidad de género: solo si la fuente la mide.'}
+ if(kind==='ethnic'){items=[['Indígena',state.population.ethIndigenous],['Rrom',state.population.ethRom],['Raizal',state.population.ethRaizal],['Palenquero',state.population.ethPalenquero],['Afro',state.population.ethAfro],['Ningún grupo',state.population.ethNone],['Sin info.',state.population.ethNoInfo]];note='Autorreconocimiento étnico según la fuente.'}
+ if(kind==='area'){items=[['Cabecera',state.population.areaUrban],['Centro poblado',state.population.areaCenter],['Rural disperso',state.population.areaRural]];note='Clase geográfica DANE.'}
+ return {rows:normalizeSegments(items).map(x=>({...x,n:reached*x.pct/100})),note};
+}
+function segmentationPanel(reached){
+ const kind=state.impact.segment||'age'; const d=segmentData(kind,reached); const mx=Math.max(1,...d.rows.map(x=>x.pct));
+ const tabs=[['age','Edad'],['sex','Sexo'],['gender','Género'],['ethnic','Étnico-racial'],['area','Área']];
+ return '<div class="seg-tabs">'+tabs.map(t=>'<button class="'+(kind===t[0]?'active-seg':'')+'" onclick="state.impact.segment=\''+t[0]+'\';save(false);renderImpact()">'+t[1]+'</button>').join('')+'</div>'+
+ (d.rows.length?'<div class="dim-note">'+d.note+' Las personas por segmento son una distribución proporcional de las personas alcanzadas, salvo que posteriormente se carguen conteos observados por segmento.</div>'+d.rows.map(x=>'<div class="segbar"><b>'+esc(x.label)+'</b><div class="track"><i style="width:'+(x.pct/mx*100)+'%"></i></div><span>'+compact(x.n)+' · '+x.pct.toFixed(1)+'%</span></div>').join(''):'<div class="empty">No hay porcentajes diligenciados para esta dimensión.</div>');
+}
+function priorityPanel(){
+ const p=state.priority||{},items=[['Adolescentes / jóvenes',p.adolescents],['Migrantes',p.migrants],['Discapacidad',p.disability],['Víctimas',p.victims],['Rural priorizada',p.ruralPriority],['Gestantes',p.pregnant]];
+ if(p.otherLabel)items.push([p.otherLabel,p.otherValue]);
+ const rows=items.filter(x=>num(x[1])>0);
+ return rows.length?'<div class="priority-wrap">'+rows.map(x=>'<span class="priority-chip">'+esc(x[0])+': <b>'+compact(x[1])+'</b></span>').join('')+'</div><div class="source-line">Las etiquetas pueden solaparse; no se suman como personas únicas.</div>':'<div class="empty">No hay poblaciones priorizadas registradas.</div>';
+}
+
 function renderImpact(){
  const root=document.getElementById('impactDash');if(!root)return;
  const all=impactRows(),cur=impactCurrentRows(),ta=totals(all),tc=totals(cur);
  if(!state.territories.length){root.innerHTML='<div class="empty">Agregue al menos un registro territorial para activar la visualización.</div>';return}
  const cpp=ta.reached?ta.investment/ta.reached:0;
- const age=ageDistribution(ta.reached);
- const maxAge=Math.max(1,...age.map(x=>x.pct));
  root.innerHTML=
  '<div class="kpis">'+
  kpi(money(ta.investment),'Inversión acumulada','Hasta '+state.impact.year)+
@@ -190,9 +259,9 @@ function renderImpact(){
  kpi(compact(ta.reached),'Personas alcanzadas','Observadas + estimadas')+
  kpi(ta.reached?money(cpp):'—','COP por persona','Inversión / alcanzadas')+'</div>'+
  '<div class="flow">'+flowNode(money(tc.investment),'Inversión '+state.impact.year)+arrow()+flowNode(compact(tc.purchases),'Compras / productos')+arrow()+flowNode(compact(tc.services),'Servicios')+arrow()+flowNode(compact(tc.reached),'Personas alcanzadas')+'</div>'+
- '<div class="impact-grid"><div class="panel"><h3>Distribución poblacional acumulada</h3><div class="help">Estimación proporcional basada en los porcentajes diligenciados en “Población”. No sustituye conteos reales por edad.</div>'+
- age.map(x=>'<div class="agebar"><b>'+x.label+'</b><div class="track"><i style="width:'+(x.pct/maxAge*100)+'%"></i></div><span>'+compact(x.n)+' · '+x.pct.toFixed(1)+'%</span></div>').join('')+
- '</div><div class="panel"><h3>Mapa territorial</h3><div style="display:flex;gap:8px;margin-bottom:10px"><select id="mapMetric" onchange="state.impact.metric=this.value;save(false);drawDaneMap()" style="max-width:220px"><option value="investment" '+(state.impact.metric==='investment'?'selected':'')+'>Inversión</option><option value="reached" '+(state.impact.metric==='reached'?'selected':'')+'>Personas alcanzadas</option><option value="services" '+(state.impact.metric==='services'?'selected':'')+'>Servicios</option></select><select id="mapLevel" onchange="state.impact.mapLevel=this.value;save(false);loadDaneMap()" style="max-width:180px"><option value="department" '+(state.impact.mapLevel==='department'?'selected':'')+'>Departamentos</option><option value="municipality" '+(state.impact.mapLevel==='municipality'?'selected':'')+'>Municipios</option></select></div><div class="mapbox"><svg id="coMap" viewBox="0 0 500 520" role="img" aria-label="Mapa de Colombia"></svg><div class="map-tip" id="mapTip"></div><div class="map-status" id="mapStatus">Cargando cartografía DANE…</div></div><div class="legend"><span>Menor</span><div class="grad"></div><span>Mayor</span></div><div class="source-line">Fuente cartográfica: DANE, DIVIPOLA MGN 2025.</div></div></div>'+
+ '<div class="impact-grid"><div><div class="panel"><h3>¿A qué población estamos llegando?</h3><div class="help">Cambie la dimensión para explorar la composición del alcance acumulado.</div>'+
+ segmentationPanel(ta.reached)+
+ '</div><div class="panel" style="margin-top:16px"><h3>Poblaciones priorizadas</h3>'+priorityPanel()+'</div></div><div class="panel"><h3>Mapa territorial</h3><div style="display:flex;gap:8px;margin-bottom:10px"><select id="mapMetric" onchange="state.impact.metric=this.value;save(false);drawDaneMap()" style="max-width:220px"><option value="investment" '+(state.impact.metric==='investment'?'selected':'')+'>Inversión</option><option value="reached" '+(state.impact.metric==='reached'?'selected':'')+'>Personas alcanzadas</option><option value="services" '+(state.impact.metric==='services'?'selected':'')+'>Servicios</option></select><select id="mapLevel" onchange="state.impact.mapLevel=this.value;save(false);loadDaneMap()" style="max-width:180px"><option value="department" '+(state.impact.mapLevel==='department'?'selected':'')+'>Departamentos</option><option value="municipality" '+(state.impact.mapLevel==='municipality'?'selected':'')+'>Municipios</option></select></div><div class="mapbox"><svg id="coMap" viewBox="0 0 500 520" role="img" aria-label="Mapa de Colombia"></svg><div class="map-tip" id="mapTip"></div><div class="map-status" id="mapStatus">Cargando cartografía DANE…</div></div><div class="legend"><span>Menor</span><div class="grad"></div><span>Mayor</span></div><div class="source-line">Fuente cartográfica: DANE, DIVIPOLA MGN 2025.</div></div></div>'+
  '<div class="panel" style="margin-top:16px"><h3>Detalle territorial</h3>'+territoryTable()+'</div>'+
  '<div class="panel" style="margin-top:16px"><h3>Lectura del año '+state.impact.year+'</h3><p>'+impactNarrative(tc,ta)+'</p><div class="note warn"><b>Interpretación:</b> inversión, compras y servicios pueden ser datos observados; “personas alcanzadas” depende del estado que marque cada registro. Esta vista no convierte cobertura en efecto causal sanitario.</div></div>';
 }
@@ -243,7 +312,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 function money(v){const n=parseFloat(v);return Number.isFinite(n)?new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n):'No definido'}
 function metrics(){const keys=[state.project.name,state.project.territory,state.project.question,state.resources.budget,state.resources.capacity,state.channels.digitalContacts,state.scenario.continuity,state.population.a1519,state.services.method,state.services.source];const done=keys.filter(v=>String(v||'').trim()).length;const p=Math.round(done/keys.length*100);document.getElementById('bar').style.width=p+'%';document.getElementById('pct').textContent=p+'%';document.getElementById('pend').textContent=keys.length-done;document.getElementById('stepNow').textContent=steps[current][0]}
 function save(show=true){localStorage.setItem('impacta-web',JSON.stringify(state));if(show)alert('Borrador guardado en este navegador.')}
-function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.1 - Explorador de inversión e impacto',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
+function downloadJSON(){const blob=new Blob([JSON.stringify({version:'IMPACTA Web 1.2 - Enfoque poblacional diferencial',exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='impacta-registro.json';a.click();URL.revokeObjectURL(a.href)}
 function go(i){current=i;render()}
 nav();render();
 </script>
